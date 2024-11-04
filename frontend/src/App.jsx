@@ -44,7 +44,7 @@ const App = () => {
             <Route path='/admin/admin-dashboard' element={<AdminDashboard/>}/>
             <Route path='/admin/user-management' element={<UserManagement/>}/>
             <Route path='/admin/adduser' element={<AddUser/>} />
-            <Route path='/admin/my-info' element={<MyInfo/>} />
+            <Route path='/admin/my-info/personal/:_id' element={<MyInfo/>} />
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>

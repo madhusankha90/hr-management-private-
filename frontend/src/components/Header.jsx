@@ -10,10 +10,9 @@ const Header = ({title}) => {
       <div className="text-white font-semibold">{title}</div>
       <div className="flex items-center space-x-2">
       <div className="flex items-center">
-          <img src="user-image.jpg" alt="User" className="h-10 w-10 rounded-full" />
-          <div className="ml-4 bg-green-600 rounded-xl py-1 px-3 text-white">
+          <img src="user-image.jpg" alt="User" className="h-5 w-5 rounded-full" />
+          <div className="ml-4 bg-white rounded-xl py-1 px-3 text-black">
             <h4 className="text-xs font-semibold uppercase">{userName}</h4>
-            <p className="text-xs text-gray-800">CEO</p>
           </div>
         </div>
       </div>

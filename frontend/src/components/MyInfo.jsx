@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "./context/authContext";
 
 
 const MyInfo = () => {
   const navigate = useNavigate();
+
   // const [userName, setUserName] = useState("");
   // const [employeeId, setEmployeeId] = useState("");
 

@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
         setRole(null);
 
-        // Remove items from localStorage
         ['employeeId', 'userName', '_id', 'token', 'role'].forEach(item => localStorage.removeItem(item));
     };
 
