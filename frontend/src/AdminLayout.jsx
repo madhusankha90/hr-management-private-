@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AdminSideMenu from "./components/admin/AdminSideMenu";
+import AdminHeader from "./components/admin/AdminHeader";
 
 
 const AdminLayout = () => {
+
+  const [activeMenuItem, setActiveMenuItem] = useState('Dashboard');
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-grow flex">
-        <AdminSideMenu />
+        <AdminSideMenu setActiveMenuItem={setActiveMenuItem}/>
         <div className="flex-grow">
-          <Header />
+          <AdminHeader title={activeMenuItem}/>
           <div className="flex-grow p-6">
             <Outlet />
             <Footer />

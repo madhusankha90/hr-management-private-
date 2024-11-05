@@ -5,23 +5,6 @@ import { useAuth } from "./context/authContext";
 
 const MyInfo = () => {
   const navigate = useNavigate();
-
-  // const [userName, setUserName] = useState("");
-  // const [employeeId, setEmployeeId] = useState("");
-
-  // useEffect(() => {
-  //   const storedUserName = localStorage.getItem("userName");
-  //   if (storedUserName) {
-  //     setUserName(storedUserName);
-  //   }
-  // }, []);
-
-  // useEffect(()=> {
-  //   const storeemployeeId = localStorage.getItem("employeeId");
-  //   if (storeemployeeId) {
-  //     setEmployeeId(storeemployeeId);
-  //   }
-  // },[])
   const { userName, employeeId, _id, logout } = useAuth();
 
 
@@ -134,6 +117,7 @@ const MyInfo = () => {
                     type="text"
                     value="20014567993"
                     className="w-full border rounded-md p-2 mt-1"
+                    readOnly
          
                   />
                 </div>
@@ -157,7 +141,7 @@ const MyInfo = () => {
                   <label className="block text-gray-700">Date of Birth</label>
                   <input
                     type="date"
-                    value="2001-11-16"
+                    defaultValue="2001-11-16"
                     className="w-full border rounded-md p-2 mt-1 "
                     readOnly
                   />
@@ -170,9 +154,10 @@ const MyInfo = () => {
                       <input
                         type="radio"
                         name="gender"
-                        value="male"
-                        className="form-radio"
+                        value='male'
                         checked
+                        className="form-radio"
+                        readOnly
                       />
                       <span className="ml-2">Male</span>
                     </label>
@@ -180,8 +165,9 @@ const MyInfo = () => {
                       <input
                         type="radio"
                         name="gender"
-                        value="female"
+                        value='female'
                         className="form-radio"
+                        readOnly
                       />
                       <span className="ml-2">Female</span>
                     </label>
