@@ -15,7 +15,7 @@ const AdminLayout = () => {
         <AdminSideMenu setActiveMenuItem={setActiveMenuItem}/>
         <div className="flex-grow">
           <AdminHeader title={activeMenuItem}/>
-          <div className="flex-grow p-6">
+          <div className="flex-grow p-4 sm:p-6 lg:p-8">
             <Outlet />
             <Footer />
             

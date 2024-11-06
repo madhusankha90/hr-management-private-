@@ -11,6 +11,8 @@ import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useAuth } from '../context/authContext';
 
 const AdminSideMenu = ({ setActiveMenuItem }) => {
@@ -41,7 +43,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
   };
 
   return (
-    <div className="flex font-primary text-xs sm:text-xs md:text-sm lg:text-sm">
+    <div className="flex font-primary text-xs md:text-sm lg:text-sm">
       {/* Toggle button for mobile view */}
       <button 
         className="md:hidden p-4 focus:outline-none"
@@ -62,27 +64,37 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
 
         <ul className="space-y-2">
           <li
-            className={`px-6 py-2 border border-black flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'UserManagement' ? 'bg-green-300 text-green-700' : ''}`}
+            className={`px-6 py-2 border border-black flex items-center cursor-pointer hover:bg-green-100 focus:bg-green-500 ${activeSubItem === 'Search' || activeSubItem === 'Add' ||
+              activeSubItem === 'All' ? 'bg-green-300 text-white' : ''} `}
             onClick={toggleDropdown}
           >
-            <AdminPanelSettingsOutlinedIcon />
+            <AdminPanelSettingsOutlinedIcon/>
             <span className="ml-2">Admin</span>
+            <span className="ml-auto">
+              {dropdownOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </span>
           </li>
 
           {/* Dropdown items below Admin */}
           {dropdownOpen && (
             <ul className="ml-12 space-y-1/4 border border-black">
               <li
-                className={`px-4 py-2 border border-black cursor-pointer hover:text-green-400 ${activeSubItem === 'Settings' ? 'bg-green-100 text-green-700' : ''}`}
-                onClick={() => handleNavClick('Settings', '/admin/user-management/settings', true)}
+                className={`px-4 py-2 border border-black cursor-pointer hover:text-green-500 ${activeSubItem === 'Search' ? 'text-green-700' : ''}`}
+                onClick={() => handleNavClick('Search', '/admin/user-management/search', true)}
               >
-                 Settings
+                 Search User
               </li>
               <li
-                className={`px-4 py-2 border border-black cursor-pointer hover:bg-green-50 ${activeSubItem === 'Roles' ? 'bg-green-100 text-green-700' : ''}`}
-                onClick={() => handleNavClick('Roles', '/admin/user-management/roles', true)}
+                className={`px-4 py-2 border border-black cursor-pointer hover:text-green-500 ${activeSubItem === 'Add' ? ' text-green-700' : ''}`}
+                onClick={() => handleNavClick('Add', '/admin/user-management/adduser', true)}
               >
-                Roles
+                Add User
+              </li>
+              <li
+                className={`px-4 py-2 border border-black cursor-pointer hover:text-green-500 ${activeSubItem === 'All' ? 'text-green-700' : ''}`}
+                onClick={() => handleNavClick('All', '/admin/user-management/all', true)}
+              >
+                All Users
               </li>
             </ul>
           )}

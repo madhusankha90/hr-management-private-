@@ -71,29 +71,13 @@ const UserManagement = () => {
 
   return (
     <div> 
-      <div className="pb-5">
-        <div className="container mx-auto flex justify-center items-center">
-          <div className="hidden md:flex space-x-6 font-primary text-xs cursor-pointer">
-            <span className="hover:text-gray-800 hover:bg-yellow-500 bg-white p-3 rounded-xl shadow-md
-            transition duration-500 hover:ease-in-out
-            ">Search Users</span>
-            <span className="hover:text-white hover:bg-yellow-500 bg-white p-3 rounded-xl shadow-md
-            transition duration-500 hover:ease-in-out
-            ">Add Users</span>
-            <span className="hover:text-white hover:bg-yellow-500 bg-white p-3 rounded-xl shadow-md
-            transition duration-500 hover:ease-in-out
-            ">All Users</span>
-          </div>
-        </div>
-      </div>
-
       <div className="container mx-auto font-primary overflow-auto shadow-md">
-        <div className="bg-white p-5 rounded-xl shadow-md">
+        <div className="bg-white p-6 lg:p-5 rounded-xl shadow-md">
           <h2 className="text-sm font-semibold mb-6">System Users</h2>
           {error && <p className='text-red-500 mb-4 text-xs'>{error}</p>}
 
           <form className='flex flex-col' onSubmit={handleSearch}>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-700">Username</label>
                 <input
@@ -101,7 +85,7 @@ const UserManagement = () => {
                   placeholder="Username"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  className="mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs"
+                  className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs"
                 />
               </div>
               <div>
@@ -111,13 +95,13 @@ const UserManagement = () => {
                   placeholder="Employee Id"
                   value={employeeId}
                   onChange={(e) => setEmployeeId(e.target.value)}
-                  className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow"
+                  className="text-xs mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow"
                 />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700">User Role</label>
                 <select
-                  className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
+                  className="text-xs mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
                   value={userRole}
                   onChange={(e) => setUserRole(e.target.value)}
                 >
@@ -129,7 +113,7 @@ const UserManagement = () => {
               <div>
                 <label className="block text-xs font-medium text-gray-700">Status</label>
                 <select
-                  className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
+                  className="text-xs mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
@@ -140,7 +124,7 @@ const UserManagement = () => {
               </div>
             </div>
 
-            <div className="text-xs mt-4 flex space-x-5">
+            <div className="text-sm md:text-xs lg:text-xs mt-4 flex space-x-5">
               <button type='submit' className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600">
                 Search
               </button>
@@ -152,8 +136,8 @@ const UserManagement = () => {
           </form>
         </div>
 
-        <div className="bg-white mt-5 p-4 rounded-xl mx-auto min-h-[18rem]">
-          <div className="mt-4 text-xs">
+        <div className="bg-white mt-5 p-6 lg:p-5 rounded-xl mx-auto min-h-[18rem]">
+          <div className="mt-4 text-sm md:text-xs lg:text-xs">
             <button
               className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600"
               onClick={() => navigate('/admin/adduser')}
