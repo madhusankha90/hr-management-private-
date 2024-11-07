@@ -159,3 +159,23 @@ Employee.collection.dropIndex("userName_1", (err) => {
 });
 
 module.exports = Employee;
+
+// maritalStatus: {
+//   type: String,
+//   enum: ["Single", "Married"],
+//   required: true,
+// },
+// dob: {
+//   type: Date,
+//   required: true,
+// },
+// gender: {
+//   type: String,
+//   enum: ["male", "female"],
+//   required: true,
+// },
+// createdAt: {
+//   type: Date,
+//   default: Date.now,
+// },
+// });

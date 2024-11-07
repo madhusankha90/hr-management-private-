@@ -140,7 +140,7 @@ const UserManagement = () => {
           <div className="mt-4 text-sm md:text-xs lg:text-xs">
             <button
               className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600"
-              onClick={() => navigate('/admin/adduser')}
+              onClick={() => navigate('/admin/user-management/adduser')}
             >
               + Add
             </button>

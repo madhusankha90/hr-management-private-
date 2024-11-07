@@ -7,7 +7,7 @@ const AdminHeader = ({title}) => {
   const { userName } = useAuth();
 
   return (
-    <div className=" mx-auto h-[8vh] min-h-[3rem] w-full p-5 lg:p-6 flex justify-between items-center font-primary" style={{ backgroundColor: '#00961C' }}>
+    <div className=" mx-auto w-full p-5 lg:p-5 flex justify-between items-center font-primary bg-gradient-to-r from-green-500 to-green-600">
       <div className="text-white font-semibold text-sm lg:text-base">{title}</div>
       <div className="flex items-center space-x-2">
       <div className="flex items-center">
