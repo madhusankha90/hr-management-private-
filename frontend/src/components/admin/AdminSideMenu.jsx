@@ -23,7 +23,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
   const [myInfoDropdownOpen, setMyInfoDropdownOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { _id } = useAuth();
+  const { _id, userName } = useAuth();
 
   const handleNavClick = (item, route, isSubItem = false) => {
     setActiveItem(item);
@@ -160,7 +160,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
               <li
                 className={`px-4 py-2 cursor-pointer hover:text-green-500 transition-all
                   duration-600 ease-in-out ${activeSubItem === 'Personal' ? 'text-green-700' : ''}`}
-                onClick={() => handleNavClick('Personal', `/admin/my-info/personal/${_id}`, true)}
+                onClick={() => handleNavClick('Personal', `/admin/my-info/personal/${userName}/${_id}/`, true)}
               >
                  Personal Details
               </li>

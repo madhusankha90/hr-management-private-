@@ -1,26 +1,75 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "./context/authContext";
+import axios from "axios";
 
 
 const MyInfo = () => {
   const navigate = useNavigate();
   const { userName, employeeId, _id } = useAuth();
+  const [error, setError] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [personalData, setPersonalData] = useState({
+    firstName: '',
+    lastName: '',
+    nic: '',
+    nationality: '',
+    matirialStatus: '',
+    dob: '',
+    gender: ''
+  });
 
-  const countries = [
-    "Sri Lanka", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
-    "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
-    "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina",
-    "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
-    "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros",
-    "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica",
-    "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia",
-    "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", 
-    "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", 
-    "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", 
-    "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "North Korea", 
-    "South Korea", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", 
-    "Libya"
+  const handleChange = (e) => {
+    setPersonalData({
+      ...personalData,
+      [e.target.name]: e.target.value,
+    });
+  }
+  const handleGenderChange = (e) => {
+    setPersonalData({
+      ...personalData,
+      gender: e.target.value,
+    });
+  }
+
+  const createPersonalDetails = async () => {
+    try {
+      await axios.post('http://localhost:5000/api/user/create-personal', personalData);
+      resetForm();
+
+    } catch (error) {
+      setError(error.response?.data?.message || 'error saving personal details');
+    }
+  }
+  const updatePersonalDetails = async () => {
+    try {
+      await axios.put('/update-personal', personalData);
+      resetForm();
+    } catch (error) {
+      setError(error.response?.data?.message || 'error updating personal details');
+    }
+  }
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    isUpdating ? updatePersonalDetails() : createPersonalDetails();
+  }
+
+  const resetForm = () => {
+    setPersonalData({
+      firstName: '',
+      lastName: '',
+      nic: '',
+      nationality: '',
+      matirialStatus: '',
+      dob: '',
+      gender: ''
+
+    })
+  }
+
+
+  const nationalities = [
+    "Sinhala", "Tamil", "Muslim" 
   ];
 
 
@@ -91,8 +140,8 @@ const MyInfo = () => {
                   <label className="block text-gray-700 text-xs font-medium">Nationality</label>
                   <select className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block">
                   <option value="">-- Select --</option>
-                  {countries.map((country) => 
-                    <option key={country} value={country}>{country}</option>
+                  {nationalities.map((national) => 
+                    <option key={national} value={national}>{national}</option>
                     )}
                   </select>
                 </div>
@@ -121,10 +170,10 @@ const MyInfo = () => {
                       <input
                         type="radio"
                         name="gender"
-                        value='male'
-                        checked
+                        value='Male'
+                        checked={personalData.gender === 'Male'}
+                        onChange={handleGenderChange}
                         className="form-radio"
-                        readOnly
                       />
                       <span className="ml-2 text-xs font-medium">Male</span>
                     </label>
@@ -132,7 +181,9 @@ const MyInfo = () => {
                       <input
                         type="radio"
                         name="gender"
-                        value='female'
+                        value='Female'
+                        checked={personalData.gender === 'Female'}
+                        onChange={handleGenderChange}
                         className="form-radio"
                       />
                       <span className="ml-2 text-xs font-medium">Female</span>
@@ -145,7 +196,7 @@ const MyInfo = () => {
                   ADD
                 </button>
                 <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
-                  SAVE
+                  {isUpdating ? 'Update' : 'Save'}
                 </button>
                 
               </div>

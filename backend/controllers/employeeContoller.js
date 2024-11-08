@@ -1,102 +1,71 @@
-const Employee = require("../models/employeeModel");
-const Punch = require('../models/punchInModel');
+const PersonalDetail = require('../models/personalDetailsModel');
 
-const createEmployee = async (req, res) => {
-  const { personalDetails, contactsDetails, customFields } = req.body;
-
-  try {
-    const existEmployee = await Employee.findOne({ "personalDetails.employeeId": personalDetails.employeeId });
-
-    if (existEmployee) {
-      return res.status(409).json({ message: "Employee ID already exists" });
-    }
-
-    const employee = new Employee({
-      personalDetails,
-      contactsDetails: contactsDetails || {
-        address: {
-          street1: "none",
-          street2: "none",
-          city: "none",
-          state: "none",
-          zip: "none",
-          country: "none",
-        },
-        telePhone: {
-          home: "none",
-          mobile: "none",
-          work: "none",
-        },
-        email: {
-          workEmail: "none",
-          otherEmail: "none",
-        },
-      },
-      customFields: customFields || {
-        testField: "none",
-      },
-    });
-    await employee.save();
-
-    res.status(201).json({ message: "Employee created successfully" });
-  
-  } catch (error) {
-    console.error("Error creating employee:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-const updateEmployee = async (req, res) => {
-  const { employeeId } = req.body;
-  const { personalDetails, contactsDetails, customFields } = req.body;
+const createPersonal = async (req, res) => {
+  const { firstName, lastName, nic, nationality, maritalStatus, dob, gender } = req.body;
 
   try {
-    const existingEmployee = await Employee.findOne({ employeeId });
-
-    if (existingEmployee) {
-      const updatedEmployee = await Employee.findOneAndUpdate(
-        { employeeId },
-        {
-          $set: {
-            ...(personalDetails && { personalDetails }),
-            ...(contactsDetails && { contactsDetails }),
-            ...(customFields && { customFields }),
-          },
-        },
-        { new: true, runValidators: true }
-      );
-
-      res.status(200).json({ message: "Employee updated successfully", updatedEmployee });
-    } else {
-      res.status(404).json({ message: "Employee not found" });
+    if (!firstName || !nic || !nationality || !dob ) {
+      return res.status(400).json({sucess: false, message: "other fields are required"})
     }
-  } catch (error) {
-    console.error("Error updating/creating employee:", error);
-    res
-      .status(500)
-      .json({ message: "Error updating/creating employee", error });
-  }
-};
-
-const createPunch = async (req,res) => {
-      const {date, time, punchNote} = req.body;
-      try {
-        const punch = new Punch({date, time, punchNote});
-        await punch.save();
-        res.status(201).json({message: "punchout successfull",punch})
-      } catch (error) {
-        res.status(500).json({error: "internal error"})
+    const personal = new PersonalDetail({
+      firstName, lastName, nic, nationality, maritalStatus, dob, gender });
+    await personal.save();
+    res.status(201).json({
+      success: true,
+      message : "personal details saved successfully",
+      personal: {
+        _id: personal._id
       }
-}
-
-const getPunch = async (req,res) => {
-  try {
-    const getpunches = await Punch.find();
-    res.json({getpunches})
-    
+    })
   } catch (error) {
-    res.status(500).json({error:"internal error"});
+    res.status(400).json({
+      success: false,
+      message: "personal details save error",
+      error: error.message
+    });
   }
 }
 
-module.exports = { createEmployee, updateEmployee, createPunch, getPunch };
+const updatePersonal = async (req, res) => {
+  const { _id } = req.params;
+  const { firstName, lastName, nic, nationality, maritalStatus, dob, gender } = req.body;
+
+  const updateData = {};
+  if (firstName !== undefined) updateData.firstName = firstName;
+  if (lastName !== undefined) updateData.lastName = lastName;
+  if (nic !== undefined) updateData.nic = nic;
+  if (nationality !== undefined) updateData.nationality = nationality;
+  if (maritalStatus !== undefined) updateData.maritalStatus = maritalStatus;
+  if (dob !== undefined) updateData.dob = dob;
+  if (gender !== undefined) updateData.gender = gender;
+
+
+  try {
+    const update = await PersonalDetail.findByIdAndUpdate(
+      _id,
+      updateData,
+      { new: true, runValidators:true}
+    );
+
+    if (!update){
+      return res.status(404).json({
+        success: false,
+        message: "personal details not found"
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "personal details updated"
+    })
+
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "updating peronal details",
+      error: error.message
+    })
+  }
+}
+
+module.exports = { createPersonal, updatePersonal};
