@@ -1,20 +1,42 @@
 const PersonalDetail = require('../models/personalDetailsModel');
+const { uploadProfilePic } = require('./profilePicController');
 
 const createPersonal = async (req, res) => {
+
+  // uploadProfilePic (req, res, async (err) => {
+  //   if (err){
+  //     return res.status(400).json({
+  //       success: false,
+  //       err: err.message,
+  //       message: "image upload failed"
+  //     })
+  //   }
+  // })
   const { firstName, lastName, nic, nationality, maritalStatus, dob, gender } = req.body;
 
   try {
     if (!firstName || !nic || !nationality || !dob ) {
-      return res.status(400).json({sucess: false, message: "other fields are required"})
+      return res.status(400).json({success: false, message: "other fields are required"})
     }
     const personal = new PersonalDetail({
-      firstName, lastName, nic, nationality, maritalStatus, dob, gender });
+      firstName,
+      lastName, 
+      nic,
+      nationality, 
+      maritalStatus, 
+      dob, 
+      gender,
+      // photo: req.file ? {
+      //   data: fs.readFileSync(req.file.path),
+      //   contentType: req.file.mimetype
+      // } : undefined
+    });
     await personal.save();
     res.status(201).json({
       success: true,
       message : "personal details saved successfully",
       personal: {
-        _id: personal._id
+        id: personal._id,
       }
     })
   } catch (error) {

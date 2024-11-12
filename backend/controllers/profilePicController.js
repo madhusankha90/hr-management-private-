@@ -35,14 +35,14 @@ const upload = multer({
         if (mimetype && extname) {
             return cb(null, true);
         } else {
-            cb(new Error('Only images and PDFs are allowed!')); // Custom error message
+            cb(new Error('Only images are allowed!')); // Custom error message
         }
     }
 });
 
 // Upload file function
 const uploadProfilePic = async (req, res) => {
-    upload.single('file')(req, res, (err) => {
+    upload.single('image')(req, res, (err) => {
         if (err) {
             return res.status(500).send(err.message || "Upload failed");
         }
@@ -50,7 +50,7 @@ const uploadProfilePic = async (req, res) => {
             return res.status(400).send("No file uploaded");
         }
         res.status(200).json({
-            message: "File uploaded successfully",
+            message: "image uploaded successfully",
             file: req.file
         });
     });

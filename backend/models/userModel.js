@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    // personalId: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "PersonalDetail"
+    // }
 }, {
     timestamps: true,
     autoIndex: false,

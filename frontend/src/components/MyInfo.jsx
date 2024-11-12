@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "./context/authContext";
 import axios from "axios";
-
+import { useAuth } from "./context/authContext";
 
 const MyInfo = () => {
   const navigate = useNavigate();
-  const { userName, employeeId, _id } = useAuth();
+  const { login, personalId, userName, employeeId, _id } = useAuth();
   const [error, setError] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [personalData, setPersonalData] = useState({
@@ -14,7 +13,7 @@ const MyInfo = () => {
     lastName: '',
     nic: '',
     nationality: '',
-    matirialStatus: '',
+    maritalStatus: '',
     dob: '',
     gender: ''
   });
@@ -24,35 +23,45 @@ const MyInfo = () => {
       ...personalData,
       [e.target.name]: e.target.value,
     });
-  }
+  };
+
   const handleGenderChange = (e) => {
     setPersonalData({
       ...personalData,
       gender: e.target.value,
     });
-  }
+  };
 
   const createPersonalDetails = async () => {
     try {
-      await axios.post('http://localhost:5000/api/user/create-personal', personalData);
+      const response = await axios.post('http://localhost:5000/api/user/create-personal/', personalData);
+      const { personal } = response.data;
+      login(personal.id)
+      // localStorage.setItem('personal_Id', personal.id);
+      // login(employeeId, userName, _id, token, role, personal.id);
+      // if (personal.id) {
+      //   localStorage.setItem('personalId', personal.id);
+      // }
       resetForm();
-
+      
     } catch (error) {
-      setError(error.response?.data?.message || 'error saving personal details');
+      setError(error.response?.data?.message || 'Error saving personal details');
     }
-  }
+  };
+
   const updatePersonalDetails = async () => {
     try {
-      await axios.put('/update-personal', personalData);
+      await axios.put(`http://localhost:5000/api/user/update-personal/${personalId}`, personalData);
       resetForm();
     } catch (error) {
-      setError(error.response?.data?.message || 'error updating personal details');
+      setError(error.response?.data?.message || 'Error updating personal details');
     }
-  }
-  const handelSubmit = (e) => {
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     isUpdating ? updatePersonalDetails() : createPersonalDetails();
-  }
+  };
 
   const resetForm = () => {
     setPersonalData({
@@ -60,18 +69,14 @@ const MyInfo = () => {
       lastName: '',
       nic: '',
       nationality: '',
-      matirialStatus: '',
+      maritalStatus: '',
       dob: '',
       gender: ''
+    });
+    setError('');
+  };
 
-    })
-  }
-
-
-  const nationalities = [
-    "Sinhala", "Tamil", "Muslim" 
-  ];
-
+  const nationalities = ["Sinhala", "Tamil", "Muslim"];
 
   return (
     <div>   
@@ -81,6 +86,7 @@ const MyInfo = () => {
           <p className="text-gray-500 mb-8 text-sm lg:text-xs font-light">
             Your account is ready, you can now apply for advice...
           </p>
+          {error && <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>}
 
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="w-full lg:w-1/3 bg-green-50 p-6 rounded-lg overflow-auto">
@@ -100,19 +106,25 @@ const MyInfo = () => {
             </div>
 
             <div className="w-full lg:w-2/3 text-sm">
-              <form className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <form className="grid grid-cols-1 lg:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-gray-700 text-xs font-medium">Employee Name</label>
                   <input
                     type="text"
+                    name="firstName"
                     placeholder="First Name"
+                    value={personalData.firstName}
+                    onChange={handleChange}
                     className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block"
                   />
                 </div>
                 <div className="mt-auto">
                   <input
                     type="text"
+                    name="lastName"
                     placeholder="Last Name"
+                    value={personalData.lastName}
+                    onChange={handleChange}
                     className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
                   />
                 </div>
@@ -131,25 +143,38 @@ const MyInfo = () => {
                   <label className="block text-gray-700 text-xs font-medium">NIC</label>
                   <input
                     type="text"
+                    name="nic"
                     placeholder="NIC Number"
+                    value={personalData.nic}
+                    onChange={handleChange}
                     className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
                   />
                 </div>
 
                 <div>
                   <label className="block text-gray-700 text-xs font-medium">Nationality</label>
-                  <select className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block">
-                  <option value="">-- Select --</option>
-                  {nationalities.map((national) => 
-                    <option key={national} value={national}>{national}</option>
-                    )}
+                  <select
+                    name="nationality"
+                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    value={personalData.nationality}
+                    onChange={handleChange}
+                  >
+                    <option value="">-- Select --</option>
+                    {nationalities.map((national) => (
+                      <option key={national} value={national}>{national}</option>
+                    ))}
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-gray-700 text-xs font-medium">Marital Status</label>
-                  <select className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block">
-                  <option value="">-- Select --</option>
+                  <select
+                    name="maritalStatus"
+                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    value={personalData.maritalStatus}
+                    onChange={handleChange}
+                  >
+                    <option value="">-- Select --</option>
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
                   </select>
@@ -159,6 +184,9 @@ const MyInfo = () => {
                   <label className="block text-gray-700 text-xs font-medium">Date of Birth</label>
                   <input
                     type="date"
+                    name="dob"
+                    value={personalData.dob}
+                    onChange={handleChange}
                     className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
                   />
                 </div>
@@ -170,7 +198,7 @@ const MyInfo = () => {
                       <input
                         type="radio"
                         name="gender"
-                        value='Male'
+                        value="Male"
                         checked={personalData.gender === 'Male'}
                         onChange={handleGenderChange}
                         className="form-radio"
@@ -181,7 +209,7 @@ const MyInfo = () => {
                       <input
                         type="radio"
                         name="gender"
-                        value='Female'
+                        value="Female"
                         checked={personalData.gender === 'Female'}
                         onChange={handleGenderChange}
                         className="form-radio"
@@ -190,16 +218,15 @@ const MyInfo = () => {
                     </label>
                   </div>
                 </div>
+                <div className="flex justify-between mt-6 text-sm md:text-xs lg:text-xs col-span-2">
+                  <button type="button" className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-full">
+                    Add
+                  </button>
+                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
+                    {isUpdating ? 'Update' : 'Save'}
+                  </button>
+                </div>
               </form>
-              <div className="flex justify-between mt-6 text-sm md:text-xs lg:text-xs">
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-full">
-                  ADD
-                </button>
-                <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
-                  {isUpdating ? 'Update' : 'Save'}
-                </button>
-                
-              </div>
             </div>
           </div>
         </div>
