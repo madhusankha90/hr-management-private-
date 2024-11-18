@@ -85,7 +85,7 @@ const UserManagement = () => {
                   placeholder="Username"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs"
+                  className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
                 />
               </div>
               <div>
@@ -95,7 +95,7 @@ const UserManagement = () => {
                   placeholder="Employee Id"
                   value={employeeId}
                   onChange={(e) => setEmployeeId(e.target.value)}
-                  className="text-xs mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow"
+                  className="text-xs mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 focus:outline-none"
                 />
               </div>
               <div>
@@ -136,7 +136,7 @@ const UserManagement = () => {
           </form>
         </div>
 
-        <div className="bg-white mt-5 p-6 lg:p-5 rounded-xl mx-auto min-h-[18rem]">
+        <div className="bg-white mt-5 p-6 lg:p-5 rounded-xl mx-auto min-h-[10rem] lg:min-h-[18rem]">
           <div className="mt-4 text-sm md:text-xs lg:text-xs">
             <button
               className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600"
@@ -146,7 +146,7 @@ const UserManagement = () => {
             </button>
           </div>
 
-          <h2 className="text-sm font-semibold mb-4 mt-4">({users.length}) Records Found</h2>
+          <h2 className=" text-base lg:text-sm font-semibold mb-4 mt-4">({users.length}) Records Found</h2>
           <div className=''>
           <table className="min-w-full table-auto font-secondary">
             <thead>

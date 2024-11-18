@@ -17,6 +17,8 @@ import UserLayout from './UserLayout';
 import UserManagement from './components/admin/UserManagement';
 import AddUser from './components/admin/AddUser';
 import { AuthProvider } from './components/context/authContext';
+import ContactDetails from './components/ContactDetails';
+import EmergencyDetails from './components/EmergencyDetails';
 
 const App = () => {
   return (
@@ -46,6 +48,8 @@ const App = () => {
             <Route path='/admin/user-management/search' element={<UserManagement/>}/>
             <Route path='/admin/user-management/adduser' element={<AddUser/>} />
             <Route path='/admin/my-info/personal/:userName/:_id/' element={<MyInfo/>} />
+            <Route path='/admin/my-info/contact/' element={<ContactDetails/>} />
+            <Route path='/admin/my-info/emergency/' element={<EmergencyDetails/>} />
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>

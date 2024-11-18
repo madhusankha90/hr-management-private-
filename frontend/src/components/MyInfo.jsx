@@ -115,7 +115,7 @@ const MyInfo = () => {
                     placeholder="First Name"
                     value={personalData.firstName}
                     onChange={handleChange}
-                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
                   />
                 </div>
                 <div className="mt-auto">
@@ -125,7 +125,8 @@ const MyInfo = () => {
                     placeholder="Last Name"
                     value={personalData.lastName}
                     onChange={handleChange}
-                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+
                   />
                 </div>
 
@@ -135,7 +136,8 @@ const MyInfo = () => {
                     type="text"
                     value={employeeId}
                     readOnly
-                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+
                   />
                 </div>
 
@@ -147,7 +149,8 @@ const MyInfo = () => {
                     placeholder="NIC Number"
                     value={personalData.nic}
                     onChange={handleChange}
-                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+
                   />
                 </div>
 
@@ -155,7 +158,7 @@ const MyInfo = () => {
                   <label className="block text-gray-700 text-xs font-medium">Nationality</label>
                   <select
                     name="nationality"
-                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
                     value={personalData.nationality}
                     onChange={handleChange}
                   >
@@ -170,7 +173,7 @@ const MyInfo = () => {
                   <label className="block text-gray-700 text-xs font-medium">Marital Status</label>
                   <select
                     name="maritalStatus"
-                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
                     value={personalData.maritalStatus}
                     onChange={handleChange}
                   >
@@ -187,7 +190,7 @@ const MyInfo = () => {
                     name="dob"
                     value={personalData.dob}
                     onChange={handleChange}
-                    className="w-full border rounded-xl p-4 lg:p-3 mt-1 text-xs block"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-non border-gray-300"
                   />
                 </div>
 

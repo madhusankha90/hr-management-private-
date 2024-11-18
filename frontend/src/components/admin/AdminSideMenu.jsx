@@ -166,13 +166,13 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
               </li>
               <li
                 className={`px-4 py-2 cursor-pointer hover:text-green-500 ${activeSubItem === 'Contact' ? ' text-green-700' : ''}`}
-                onClick={() => handleNavClick('Contact', `/admin/user-management/${_id}`, true)}
+                onClick={() => handleNavClick('Contact', `/admin/my-info/contact/`, true)}
               >
                 Contact Details
               </li>
               <li
                 className={`px-4 py-2  cursor-pointer hover:text-green-500 ${activeSubItem === 'Emergency' ? 'text-green-700' : ''}`}
-                onClick={() => handleNavClick('Emergency', `/admin/user-management/${_id}`, true)}
+                onClick={() => handleNavClick('Emergency', `/admin/my-info/emergency/`, true)}
               >
                 Emergency Details
               </li>
