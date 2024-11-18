@@ -1,5 +1,6 @@
 const PersonalDetail = require('../models/personalDetailsModel');
 const { uploadProfilePic } = require('./profilePicController');
+const EmergencyDetail = require('../models/emergencyDetailsModel');
 
 const createPersonal = async (req, res) => {
 
@@ -87,6 +88,25 @@ const updatePersonal = async (req, res) => {
       message: "updating peronal details",
       error: error.message
     })
+  }
+}
+
+const createEmergency = async (req, res) => {
+  const {name, relationship, mobile} = req.body;
+  try {
+    if ( !name || !relationship || !mobile) {
+      return res.status(400).json({success: false, message: "all fields are required"});}
+
+    const emergency = new EmergencyDetail({ name, relationship, mobile});
+    await emergency.save();
+    res.status(201).json({success : true, message: "emergency details saved"})
+
+  } catch (error) {
+    res.status(400).json({
+      success : false,
+      message: "emergency details save error",
+      error: error.message
+     })
   }
 }
 
