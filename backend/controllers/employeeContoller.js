@@ -17,7 +17,7 @@ const createPersonal = async (req, res) => {
 
   try {
     if (!firstName || !nic || !nationality || !dob ) {
-      return res.status(400).json({success: false, message: "other fields are required"})
+      return res.status(400).json({success: false, message: "Other Fields are Required"})
     }
     const personal = new PersonalDetail({
       firstName,
@@ -35,7 +35,7 @@ const createPersonal = async (req, res) => {
     await personal.save();
     res.status(201).json({
       success: true,
-      message : "personal details saved successfully",
+      message : "Personal Details Saved Successfully",
       personal: {
         id: personal._id,
       }
@@ -43,7 +43,7 @@ const createPersonal = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "personal details save error",
+      message: "Personal Details Save Error",
       error: error.message
     });
   }
@@ -93,21 +93,46 @@ const updatePersonal = async (req, res) => {
 
 const createEmergency = async (req, res) => {
   const {name, relationship, mobile} = req.body;
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
   try {
     if ( !name || !relationship || !mobile) {
-      return res.status(400).json({success: false, message: "all fields are required"});}
+      return res.status(400).json({success: false, message: "All fields are required"});}
 
-    const emergency = new EmergencyDetail({ name, relationship, mobile});
+    const emergency = new EmergencyDetail({ name, relationship, mobile, employeeId});
     await emergency.save();
-    res.status(201).json({success : true, message: "emergency details saved"})
+    res.status(201).json({
+      success : true, 
+      message: "Emergency details saved successfully",
+      emergency,
+    })
 
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success : false,
-      message: "emergency details save error",
-      error: error.message
+      message: "Failed to save emergency details",
+      error: error.message,
      })
   }
 }
 
-module.exports = { createPersonal, updatePersonal};
+const getEmergency = async (req, res) => {
+  try {
+    const employeeId = req.user?.employeeId || req.headers['employee-id'];
+    if (!employeeId) {
+      return res.status(400).json({
+        success: false,
+        message: "Employee ID is required to fetch emergency data"
+      })
+    }
+    const emergencyData = await EmergencyDetail.find({employeeId});
+    res.json({emergencyData})
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    })
+  }
+}
+
+module.exports = { createPersonal, updatePersonal, createEmergency, getEmergency};

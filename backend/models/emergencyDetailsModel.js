@@ -12,6 +12,10 @@ const emergencySchema = new mongoose.Schema({
     mobile: {
         type: String,
         required: true
+    },
+    employeeId: {
+        type: String,
+        required: true
     }
 },
     {

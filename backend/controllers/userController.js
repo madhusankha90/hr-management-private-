@@ -7,26 +7,42 @@ const createUser = async (req,res) => {
     const {userRole,userName,status,employeeId,password} = req.body;
     try {
       if(!userRole || !userName || !status || !employeeId || !password) {
-        return res.status(400).json({message: "All fields are required"})
+        return res.status(400).json({
+          success: false,
+          message: "All fields are required",
+        })
       }
 
       if(!password || password.trim() === "") {
-        return res.status(400).json({ message : "Password cannot be empty"})
+        return res.status(400).json({ 
+          success: false,
+          message : "Password Cannot be Empty",
+        })
       }
         
       const extingUser = await User.findOne({ employeeId});
         if (extingUser){
-            return res.status(409).json({message:"User already exists"})
+            return res.status(409).json({
+              success: false,
+              message:"User Already Exists"
+            })
         }
 
       const hash = bcrypt.hashSync(password, 10);
       const users = new User({userRole,userName,status,employeeId,password: hash});
       await users.save();
 
-      res.status(201).json({message:"User created successfully" });
+      res.status(201).json({
+        success: false,
+        message:"User Created Successfully",
+       });
   
     } catch (error) {
-      res.status(400).json({error: "User save error"})
+      res.status(400).json({
+        success: false,
+        message: "User Saving Error",
+        error: error.message,
+      })
     }
   }
 
@@ -35,11 +51,11 @@ const loginUser = async (req,res) => {
   try {
     const user = await User.findOne({userName});
     if (!user) {
-      return res.status(404).json({message:"user not found"})
+      return res.status(404).json({message:"User Not Found"})
     }
     const isPasswordValid = await bcrypt.compareSync(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({message:"invalid password"});
+      return res.status(401).json({message:"Invalid Password"});
     }
     const token = jwt.sign(
       { id: user._id, userRole: user.userRole },
@@ -58,7 +74,7 @@ const loginUser = async (req,res) => {
   });
 
   } catch (error) {
-    res.status(500).json({error:"login error"})
+    res.status(500).json({error:"Login Error"})
   }
 }
 
@@ -71,7 +87,11 @@ const logOutUser = async (req,res) => {
     res.status(200).json({ message: "user logged out successfully." })
 
   } catch (error) {
-    res.status(500).json({ error : "Logout failed." });
+    res.status(500).json({ 
+      success: false,
+      message: "Logout Failed",
+      error: error.message ,
+    });
   }
 }
 
@@ -97,7 +117,11 @@ const getUser = async (req,res) => {
     const user = await User.find(searchCriteria);
     res.json({user});
   } catch (error) {
-    res.status(500).json({error: "Internal server error"})
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    })
   }
 }
 

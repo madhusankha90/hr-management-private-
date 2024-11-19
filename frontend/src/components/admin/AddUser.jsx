@@ -40,7 +40,7 @@ const AddUser = () => {
         setStatus('');
         setPassword('');
         setConfirmPassword('');
-        setSuccessMessage('user added successfully');
+        setSuccessMessage(response.data.message);
       }else {
         setError(error.response?.data?.message || 'An error occurred');
       }
@@ -62,7 +62,7 @@ const AddUser = () => {
         <h2 className="text-sm font-semibold mb-6">Add Users</h2>
 
         { saving ? (
-          <p className="text-green-500 mb-4 text-xs font-semibold">saving user...</p>
+          <p className="text-green-500 mb-4 text-xs font-semibold">saving User...</p>
         ) : ( 
           <>
           {error && <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>}
