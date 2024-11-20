@@ -9,7 +9,7 @@ export default {
       fontFamily: {
         primary : ['Montserrat', 'sans-serif'],
         secondary : ['Segoe UI'],
-        third: ['Inter', 'sans-serif']
+        third: ['Arial', 'sans-serif']
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite',

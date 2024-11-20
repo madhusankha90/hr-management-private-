@@ -23,6 +23,7 @@ const EmergencyDetails = () => {
     setError("");
     setSaving(true);
     setSuccess("");
+    
 
     try {
       const response = await axios.post(
@@ -31,9 +32,8 @@ const EmergencyDetails = () => {
           name,
           relationship,
           mobile,
-        },
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
+        }, {
+            headers: { 'employee-id': localStorage.getItem('employeeId') }
         }
       );
       setSuccess(response.data.message);
@@ -41,6 +41,7 @@ const EmergencyDetails = () => {
       setRelationship("");
       setMobile("");
       handleEmergency();
+      
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
     } finally {
@@ -55,14 +56,12 @@ const EmergencyDetails = () => {
     setError("");
 
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/user/get-emergency",
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        }
+      const response = await axios.get("http://localhost:5000/api/user/get-emergency",{
+            headers: { 'employee-id': localStorage.getItem('employeeId') }
+          }
       );
       const user = response.data.emergencyData;
-      setUsers(Array.isArray(user) ? user : user ? [user] : []);
+    setUsers(Array.isArray(user) ? user : user ? [user] : []);
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
     } finally {
@@ -78,35 +77,25 @@ const EmergencyDetails = () => {
             Emergency Contact Details
           </h2>
 
-          {saving ? (
+          { saving ? (
             <p className="text-green-500 mb-4 text-xs font-semibold">
               Saving Emergency Details...
             </p>
           ) : (
             <>
-              {error && (
-                <p className="text-red-500 mb-4 text-xs font-semibold">
-                  {error}
-                </p>
-              )}
-              {success && (
-                <p className="text-green-500 mb-4 text-xs font-semibold">
-                  {success}
-                </p>
-              )}
-            </>
+          {error && <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>}
+          {success && <p className="text-green-500 mb-4 text-xs font-semibold">{success}</p>}
+          </>
           )}
 
           <form className="flex flex-col" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label htmlFor="name" 
-                className="block text-xs font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Name
                 </label>
                 <input
                   type="text"
-                  id="name"
                   placeholder="Enter Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -114,13 +103,11 @@ const EmergencyDetails = () => {
                 />
               </div>
               <div>
-                <label htmlFor="relationship" 
-                className="block text-xs font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Relationship
                 </label>
                 <input
                   type="text"
-                  id="relationship"
                   placeholder="Relationship"
                   value={relationship}
                   onChange={(e) => setRelationship(e.target.value)}
@@ -128,24 +115,22 @@ const EmergencyDetails = () => {
                 />
               </div>
               <div>
-                <label htmlFor="mobile"
-                className="block text-xs font-medium text-gray-700">
+                <label className="block text-xs font-medium text-gray-700">
                   Mobile
                 </label>
                 <input
                   type="text"
-                  id="mobile"
                   placeholder="Enter Mobile"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
                 />
               </div>
-            </div>
-            <div className="flex justify-end text-sm lg:text-xs mt-6">
-              <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
-                Add
-              </button>
+              <div className="text-sm lg:text-xs mt-6">
+                <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
+                  Add
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -153,7 +138,7 @@ const EmergencyDetails = () => {
 
       <div className="bg-white mt-5 p-6 lg:p-5 w-full font-primary mx-auto rounded-xl shadow-md min-h-[10rem] lg:min-h-[18rem]">
         <h2 className="text-base lg:text-sm font-semibold mb-4">
-          ({users.length}) Records Found
+          Records Found
         </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto font-secondary ">

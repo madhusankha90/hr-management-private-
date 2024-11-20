@@ -106,11 +106,13 @@ const MyInfo = () => {
             </div>
 
             <div className="w-full lg:w-2/3 text-sm">
-              <form className="grid grid-cols-1 lg:grid-cols-2 gap-6" onSubmit={handleSubmit}>
+              <form className="grid grid-cols-1 lg:grid-cols-2 gap-4" onSubmit={handleSubmit}>
                 <div>
-                  <label className="block text-gray-700 text-xs font-medium">Employee Name</label>
+                  <label htmlFor="firstName"
+                  className="block text-gray-700 text-xs font-medium">Employee Name</label>
                   <input
                     type="text"
+                    id="firstName"
                     name="firstName"
                     placeholder="First Name"
                     value={personalData.firstName}
@@ -142,9 +144,11 @@ const MyInfo = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-xs font-medium">NIC</label>
+                  <label htmlFor="nic"
+                  className="block text-gray-700 text-xs font-medium">NIC</label>
                   <input
                     type="text"
+                    id="nic"
                     name="nic"
                     placeholder="NIC Number"
                     value={personalData.nic}
@@ -155,8 +159,10 @@ const MyInfo = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-xs font-medium">Nationality</label>
+                  <label htmlFor="nationality"
+                  className="block text-gray-700 text-xs font-medium">Nationality</label>
                   <select
+                    id="nationality"
                     name="nationality"
                     className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
                     value={personalData.nationality}
@@ -170,8 +176,10 @@ const MyInfo = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-xs font-medium">Marital Status</label>
+                  <label htmlFor="maritalStatus"
+                  className="block text-gray-700 text-xs font-medium">Marital Status</label>
                   <select
+                    id="maritalStatus"
                     name="maritalStatus"
                     className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
                     value={personalData.maritalStatus}
@@ -184,13 +192,15 @@ const MyInfo = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-xs font-medium">Date of Birth</label>
+                  <label htmlFor="dob"
+                  className="block text-gray-700 text-xs font-medium">Date of Birth</label>
                   <input
+                    id="dob"
                     type="date"
                     name="dob"
                     value={personalData.dob}
                     onChange={handleChange}
-                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-non border-gray-300"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
                   />
                 </div>
 

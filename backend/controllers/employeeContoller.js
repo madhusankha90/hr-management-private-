@@ -1,6 +1,7 @@
 const PersonalDetail = require('../models/personalDetailsModel');
 const { uploadProfilePic } = require('./profilePicController');
 const EmergencyDetail = require('../models/emergencyDetailsModel');
+const JobDetail = require('../models/JobDetailsModel');
 
 const createPersonal = async (req, res) => {
 
@@ -96,7 +97,7 @@ const createEmergency = async (req, res) => {
   const employeeId = req.user?.employeeId || req.headers['employee-id'];
   try {
     if ( !name || !relationship || !mobile) {
-      return res.status(400).json({success: false, message: "All fields are required"});}
+      return res.status(400).json({success: false, message: "All fields are Required"});}
 
     const emergency = new EmergencyDetail({ name, relationship, mobile, employeeId});
     await emergency.save();
@@ -135,4 +136,38 @@ const getEmergency = async (req, res) => {
   }
 }
 
-module.exports = { createPersonal, updatePersonal, createEmergency, getEmergency};
+const createJob = async (req, res) => {
+  const {joinedDate, jobTitle, jobSpecification, jobCategory, subUnit, location, employmentStatus} = req.body;
+  try {
+    if (!joinedDate || !jobTitle || !jobSpecification || !jobCategory || !subUnit || !location || !employmentStatus) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are Required",
+      })
+    }
+    const job = new JobDetail({
+      joinedDate, 
+      jobTitle, 
+      jobSpecification,
+      jobCategory, 
+      subUnit, 
+      location, 
+      employmentStatus
+    });
+    await job.save();
+    res.status(201).json({
+      success: true,
+      message: "Job Details Saved Successfully",
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    })
+  }
+}
+
+
+module.exports = { createPersonal, updatePersonal, createEmergency, getEmergency, createJob};

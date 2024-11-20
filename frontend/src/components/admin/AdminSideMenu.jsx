@@ -178,7 +178,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
               </li>
               <li
                 className={`px-4 py-2 cursor-pointer hover:text-green-500 ${activeSubItem === 'Job' ? 'text-green-700' : ''}`}
-                onClick={() => handleNavClick('Job', `/admin/user-management/${_id}`, true)}
+                onClick={() => handleNavClick('Job', '/admin/my-info/job/', true)}
               >
                 Job
               </li>
