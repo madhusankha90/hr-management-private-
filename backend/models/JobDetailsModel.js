@@ -28,6 +28,10 @@ const JobSchema = new mongoose.Schema({
     employmentStatus: {
         type: String,
         required: true
+    },
+    employeeId: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true

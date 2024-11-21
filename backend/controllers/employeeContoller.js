@@ -169,5 +169,25 @@ const createJob = async (req, res) => {
   }
 }
 
+const getJob = async (req, res) => {
+  try {
+    const employeeId = req.user?.employeeId || req.headers['employee-id']
+    if (!employeeId) {
+      return res.status(400).json({
+        success: false,
+        message: "Employee ID is required to fetch emergency data"
+      });
+    }
+    const jobData = await JobDetail.findOne({ employeeId});
+    res.json( { jobData } );
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    })
+  }
+}
 
-module.exports = { createPersonal, updatePersonal, createEmergency, getEmergency, createJob};
+
+module.exports = { createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob};

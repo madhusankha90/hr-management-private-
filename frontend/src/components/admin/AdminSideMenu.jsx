@@ -183,6 +183,12 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
                 Job
               </li>
               <li
+                className={`px-4 py-2 cursor-pointer hover:text-green-500 ${activeSubItem === 'Salary' ? 'text-green-700' : ''}`}
+                onClick={() => handleNavClick('Salary', '/admin/my-info/salary/', true)}
+              >
+                Salary
+              </li>
+              <li
                 className={`px-4 py-2 cursor-pointer hover:text-green-500 ${activeSubItem === 'Qualifications' ? 'text-green-700' : ''}`}
                 onClick={() => handleNavClick('Qualifications', `/admin/user-management/${_id}`, true)}
               >

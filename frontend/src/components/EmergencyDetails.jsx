@@ -50,7 +50,8 @@ const EmergencyDetails = () => {
     }
   };
 
-  const handleEmergency = async () => {
+  const handleEmergency = async (e) => {
+    e.preventDefault();
     setLoading(true);
     setError("");
 
@@ -100,8 +101,10 @@ const EmergencyDetails = () => {
           <form className="flex flex-col" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label htmlFor="name" 
-                className="block text-xs font-medium text-gray-700">
+                <label
+                  htmlFor="name"
+                  className="block text-xs font-medium text-gray-700"
+                >
                   Name
                 </label>
                 <input
@@ -114,8 +117,10 @@ const EmergencyDetails = () => {
                 />
               </div>
               <div>
-                <label htmlFor="relationship" 
-                className="block text-xs font-medium text-gray-700">
+                <label
+                  htmlFor="relationship"
+                  className="block text-xs font-medium text-gray-700"
+                >
                   Relationship
                 </label>
                 <input
@@ -128,8 +133,10 @@ const EmergencyDetails = () => {
                 />
               </div>
               <div>
-                <label htmlFor="mobile"
-                className="block text-xs font-medium text-gray-700">
+                <label
+                  htmlFor="mobile"
+                  className="block text-xs font-medium text-gray-700"
+                >
                   Mobile
                 </label>
                 <input
@@ -156,7 +163,7 @@ const EmergencyDetails = () => {
           ({users.length}) Records Found
         </h2>
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto font-secondary ">
+          <table className="min-w-full table-auto font-secondary">
             <thead>
               <tr>
                 <th className="px-4 py-2 border text-xs">Name</th>
