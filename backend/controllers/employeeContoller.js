@@ -138,6 +138,7 @@ const getEmergency = async (req, res) => {
 
 const createJob = async (req, res) => {
   const {joinedDate, jobTitle, jobSpecification, jobCategory, subUnit, location, employmentStatus} = req.body;
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
   try {
     if (!joinedDate || !jobTitle || !jobSpecification || !jobCategory || !subUnit || !location || !employmentStatus) {
       return res.status(400).json({
@@ -152,13 +153,15 @@ const createJob = async (req, res) => {
       jobCategory, 
       subUnit, 
       location, 
-      employmentStatus
+      employmentStatus,
+      employeeId,
     });
     await job.save();
     res.status(201).json({
       success: true,
       message: "Job Details Saved Successfully",
     })
+  
 
   } catch (error) {
     res.status(500).json({
@@ -178,7 +181,7 @@ const getJob = async (req, res) => {
         message: "Employee ID is required to fetch emergency data"
       });
     }
-    const jobData = await JobDetail.findOne({ employeeId});
+    const jobData = await JobDetail.find({ employeeId});
     res.json( { jobData } );
   } catch (error) {
     res.status(500).json({

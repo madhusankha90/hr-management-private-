@@ -1,15 +1,14 @@
-import { getLocalStorageItem } from "../../utils/storageUtils";
 import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [employeeId, setEmployeeId] = useState(getLocalStorageItem('employeeId') || null);
-    const [userName, setUserName] = useState(getLocalStorageItem('userName') || null);
-    const [_id, setId] = useState(getLocalStorageItem('_id') || null);
-    const [token, setToken] = useState(getLocalStorageItem('token') || null);
-    const [role, setRole] = useState(getLocalStorageItem('role') || null);
-    const [personalId, setPersonalId] = useState(getLocalStorageItem('personal_Id') || null);
+    const [employeeId, setEmployeeId] = useState(localStorage.getItem('employeeId') || null);
+    const [userName, setUserName] = useState(localStorage.getItem('userName') || null);
+    const [_id, setId] = useState(localStorage.getItem('_id') || null);
+    const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [role, setRole] = useState(localStorage.getItem('role') || null);
+    const [personalId, setPersonalId] = useState(localStorage.getItem('personal_Id') || null);
   
     const login = (id, name, userId, userToken, userRole, pId = null) => {
       const loginData = {
@@ -28,18 +27,18 @@ export const AuthProvider = ({ children }) => {
       setRole(loginData.role);
   
       if (pId) {
-        setPersonalId(loginData.personalId);
+        setPersonalId(pId);
+        localStorage.setItem('personal_Id', pId);
+      } else {
+        setPersonalId(null);
+        localStorage.removeItem('personal_Id');
       }
-    
-        localStorage.setItem("employeeId", JSON.stringify(loginData.employeeId));
-        localStorage.setItem("userName", JSON.stringify(loginData.userName));
-        localStorage.setItem("_id", JSON.stringify(loginData._id));
-        localStorage.setItem("token", JSON.stringify(loginData.token));
-        localStorage.setItem("role", JSON.stringify(loginData.role));
-
-        if (pId) {
-          localStorage.setItem("personal_Id", JSON.stringify(loginData.personalId));
+  
+      Object.keys(loginData).forEach(key => {
+        if (loginData[key] !== null) {
+          localStorage.setItem(key, loginData[key]);
         }
+      });
     };
   
     const logout = () => {

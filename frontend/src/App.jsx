@@ -21,6 +21,7 @@ import ContactDetails from './components/ContactDetails';
 import EmergencyDetails from './components/EmergencyDetails';
 import JobDetails from './components/JobDetails';
 import Salary from './components/Salary';
+import Qualification from './components/Qualification';
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
             <Route path='/admin/my-info/emergency/' element={<EmergencyDetails/>} />
             <Route path='/admin/my-info/job/' element={<JobDetails/>} />
             <Route path='/admin/my-info/salary/' element={<Salary/>} />
+            <Route path='/admin/my-info/qualification/' element={<Qualification/>} />
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>

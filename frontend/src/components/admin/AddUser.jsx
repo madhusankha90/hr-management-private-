@@ -2,58 +2,57 @@ import axios from "axios";
 import React, { useState } from "react";
 
 const AddUser = () => {
-
-  const [userName, setUserName] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
-  const [userRole, setUserRole] = useState('');
-  const [status, setStatus] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [error, setError] = useState('');
-  const [saving, setSaving] = useState(false)
+  const [userName, setUserName] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const [status, setStatus] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSaving(true)
-    setSuccessMessage('');
+    setError("");
+    setSaving(true);
+    setSuccessMessage("");
 
     if (password !== confirmPassword) {
-      setError('password do not match');
+      setError("password do not match");
       setSaving(false);
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/signup',{
-        userName,
-        employeeId,
-        userRole,
-        status,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/admin/signup",
+        {
+          userName,
+          employeeId,
+          userRole,
+          status,
+          password,
+        }
+      );
       if (response.status === 201) {
-        setUserName('');
-        setEmployeeId('');
-        setUserRole('');
-        setStatus('');
-        setPassword('');
-        setConfirmPassword('');
+        setUserName("");
+        setEmployeeId("");
+        setUserRole("");
+        setStatus("");
+        setPassword("");
+        setConfirmPassword("");
         setSuccessMessage(response.data.message);
-      }else {
-        setError(error.response?.data?.message || 'An error occurred');
+      } else {
+        setError(error.response?.data?.message || "An error occurred");
       }
-
-
     } catch (error) {
-      setError(error.response?.data?.message || 'An error occurred');
-    }finally {
-      setTimeout( ()=> {
-        setSaving(false)
-      },700)
+      setError(error.response?.data?.message || "An error occurred");
+    } finally {
+      setTimeout(() => {
+        setSaving(false);
+      }, 700);
     }
-    
   };
 
   return (
@@ -61,13 +60,13 @@ const AddUser = () => {
       <div className="bg-white p-6 rounded-xl shadow-md">
         <h2 className="text-sm font-semibold mb-6">Add Users</h2>
 
-        { saving ? (
-          <p className="text-green-500 mb-4 text-xs font-semibold">saving User...</p>
-        ) : ( 
-          <>
-          {error && <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>}
-          {successMessage && <p className="text-green-500 mb-4 text-xs font-semibold">{successMessage}</p>}
-          </>
+        {error && (
+          <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>
+        )}
+        {successMessage && (
+          <p className="text-green-500 mb-4 text-xs font-semibold">
+            {successMessage}
+          </p>
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -85,8 +84,8 @@ const AddUser = () => {
                 name="username"
                 placeholder="Enter username"
                 value={userName}
-                onChange={(e)=> setUserName(e.target.value)}
-                className="mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs"
+                onChange={(e) => setUserName(e.target.value)}
+                className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
               />
             </div>
 
@@ -104,7 +103,7 @@ const AddUser = () => {
                 placeholder="Enter employee ID"
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
-                className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
+                className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
               />
             </div>
           </div>
@@ -121,8 +120,8 @@ const AddUser = () => {
                 id="userRole"
                 name="userRole"
                 value={userRole}
-                onChange={(e)=> setUserRole(e.target.value)}
-                className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
+                onChange={(e) => setUserRole(e.target.value)}
+                className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
               >
                 <option value="">-- Select --</option>
                 <option value="Admin">Admin</option>
@@ -141,8 +140,8 @@ const AddUser = () => {
                 id="status"
                 name="status"
                 value={status}
-                onChange={(e)=> setStatus(e.target.value)}
-                className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
+                onChange={(e) => setStatus(e.target.value)}
+                className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
               >
                 <option value="">-- Select --</option>
                 <option value="Enable">Enable</option>
@@ -165,8 +164,8 @@ const AddUser = () => {
                 name="password"
                 placeholder="Enter password"
                 value={password}
-                onChange={(e)=> setPassword(e.target.value)}
-                className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
               />
             </div>
 
@@ -183,8 +182,8 @@ const AddUser = () => {
                 name="confirmPassword"
                 placeholder="Confirm password"
                 value={confirmPassword}
-                onChange={(e)=> setConfirmPassword(e.target.value)}
-                className="text-xs mt-1 block w-full p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
               />
             </div>
           </div>
@@ -192,10 +191,10 @@ const AddUser = () => {
           <div className="flex justify-end mt-4">
             <button
               type="submit"
-              className="px-4 py-2 bg-yellow-500 text-gray-700 rounded-full hover:bg-yellow-600 transition-all text-xs
-              hover:text-white"
+              className="px-3 py-2 bg-green-500 rounded-full hover:bg-green-600 transition-all text-xs
+              text-white"
             >
-              Add
+              {saving ? "Saving" : "Save"}
             </button>
           </div>
         </form>

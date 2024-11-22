@@ -50,8 +50,7 @@ const EmergencyDetails = () => {
     }
   };
 
-  const handleEmergency = async (e) => {
-    e.preventDefault();
+  const handleEmergency = async () => {
     setLoading(true);
     setError("");
 
@@ -78,13 +77,6 @@ const EmergencyDetails = () => {
           <h2 className="text-base lg:text-sm font-semibold mb-6">
             Emergency Contact Details
           </h2>
-
-          {saving ? (
-            <p className="text-green-500 mb-4 text-xs font-semibold">
-              Saving Emergency Details...
-            </p>
-          ) : (
-            <>
               {error && (
                 <p className="text-red-500 mb-4 text-xs font-semibold">
                   {error}
@@ -95,8 +87,6 @@ const EmergencyDetails = () => {
                   {success}
                 </p>
               )}
-            </>
-          )}
 
           <form className="flex flex-col" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -150,15 +140,15 @@ const EmergencyDetails = () => {
               </div>
             </div>
             <div className="flex justify-end text-sm lg:text-xs mt-6">
-              <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
-                Add
+              <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-xl">
+                { saving ? "Saving" : "Add" }
               </button>
             </div>
           </form>
         </div>
       </div>
 
-      <div className="bg-white mt-5 p-6 lg:p-5 w-full font-primary mx-auto rounded-xl shadow-md min-h-[10rem] lg:min-h-[18rem]">
+      <div className="bg-white mt-5 p-6 lg:p-5 w-full font-primary mx-auto rounded-xl shadow-md min-h-[10rem] lg:min-h-[18rem] overflow-auto">
         <h2 className="text-base lg:text-sm font-semibold mb-4">
           ({users.length}) Records Found
         </h2>
@@ -166,10 +156,10 @@ const EmergencyDetails = () => {
           <table className="min-w-full table-auto font-secondary">
             <thead>
               <tr>
-                <th className="px-4 py-2 border text-xs">Name</th>
-                <th className="px-4 py-2 border text-xs">Relationship</th>
-                <th className="px-4 py-2 border text-xs">Mobile</th>
-                <th className="px-4 py-2 border text-xs">Action</th>
+                <th className="px-4 py-2 text-xs">Name</th>
+                <th className="px-4 py-2 text-xs">Relationship</th>
+                <th className="px-4 py-2 text-xs">Mobile</th>
+                <th className="px-4 py-2 text-xs">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -182,12 +172,12 @@ const EmergencyDetails = () => {
               ) : users.length > 0 ? (
                 users.map((user, main) => (
                   <tr key={main}>
-                    <td className="px-4 py-3 border text-xs">{user.name}</td>
-                    <td className="px-4 py-3 border text-xs">
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">{user.name}</td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
                       {user.relationship}
                     </td>
-                    <td className="px-4 py-3 border text-xs">{user.mobile}</td>
-                    <td className="border text-xs space-x-2 text-center">
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">{user.mobile}</td>
+                    <td className="text-xs space-x-2 text-center bg-yellow-200">
                       <button
                         className="px-1 py-1 bg-blue-500 text-white hover:bg-blue-600 transition duration-200
                       rounded-2xl"
@@ -205,8 +195,8 @@ const EmergencyDetails = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="text-center py-8 text-sm">
-                    No Emergency Records Found
+                  <td colSpan="4" className="text-center px-4 py-3 text-xs bg-yellow-200">
+                    No records found
                   </td>
                 </tr>
               )}

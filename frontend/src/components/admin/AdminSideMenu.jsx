@@ -52,7 +52,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
       </button>
 
 
-      <div className={`fixed md:relative top-0 left-0 w-[70vw] md:w-[30vh] min-h-full bg-white border-r border-gray-200 transition-transform transform ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+      <div className={`fixed md:relative top-0 left-0 w-[20vh] md:w-[30vh] lg:w-[30vh] min-h-full min-w-[15rem] bg-white border-r border-gray-200 transition-transform transform ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
         <div className="p-6 flex justify-between items-center">
           <img src={w3inventor} alt="Company Logo" className="h-8" />
      
@@ -190,7 +190,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
               </li>
               <li
                 className={`px-4 py-2 cursor-pointer hover:text-green-500 ${activeSubItem === 'Qualifications' ? 'text-green-700' : ''}`}
-                onClick={() => handleNavClick('Qualifications', `/admin/user-management/${_id}`, true)}
+                onClick={() => handleNavClick('Qualifications', '/admin/my-info/qualification/', true)}
               >
                 Qualifications
               </li>

@@ -151,11 +151,11 @@ const UserManagement = () => {
           <table className="min-w-full table-auto font-secondary">
             <thead>
               <tr>
-                <th className="px-4 py-2 border text-xs">Username</th>
-                <th className="px-4 py-2 border text-xs">Employee ID</th>
-                <th className="px-4 py-2 border text-xs">User Role</th>
-                <th className="px-4 py-2 border text-xs">Status</th>
-                <th className="px-4 py-2 border text-xs">Actions</th>
+                <th className="px-4 py-2 text-xs">Username</th>
+                <th className="px-4 py-2 text-xs">Employee ID</th>
+                <th className="px-4 py-2 text-xs">User Role</th>
+                <th className="px-4 py-2 text-xs">Status</th>
+                <th className="px-4 py-2 text-xs">Actions</th>
               </tr>
             </thead>
 
@@ -169,11 +169,11 @@ const UserManagement = () => {
               ) : displayedUsers.length > 0 ? (
                 displayedUsers.map((user, index) => (
                   <tr key={index}>
-                    <td className='px-4 py-3 border text-xs'>{user.userName}</td>
-                    <td className='px-4 py-3 border text-xs'>{user.employeeId}</td>
-                    <td className='px-4 py-3 border text-xs'>{user.userRole}</td>
-                    <td className='px-4 py-3 border text-xs'>{user.status}</td>
-                    <td className=' border text-xs space-x-2 text-center'>
+                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.userName}</td>
+                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.employeeId}</td>
+                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.userRole}</td>
+                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.status}</td>
+                    <td className='text-xs space-x-2 text-center bg-yellow-200'>
                       <button className='px-1 py-1 bg-blue-500 text-white hover:bg-blue-600 transition duration-200
                       rounded-2xl'>
                         <EditIcon/>
@@ -187,7 +187,7 @@ const UserManagement = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center text-sm py-8">No users found</td>
+                  <td colSpan="5" className="text-center text-xs px-4 py-3 bg-yellow-200">No users found</td>
                 </tr>
               )}
             </tbody>

@@ -1,5 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const JobDetails = () => {
   const [error, setError] = useState("");
@@ -32,13 +34,14 @@ const JobDetails = () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/api/user/create-job",
-        jobData, {
-          headers: { "employee-id": localStorage.getItem("employeeId") }
+        jobData,
+        {
+          headers: { "employee-id": localStorage.getItem("employeeId") },
         }
       );
       setSuccess(response.data.message);
+      fetchJobs();
       resetForm();
-      handleJob();
     } catch (error) {
       setError(error.response?.data?.message || "Error saving Job Details");
     } finally {
@@ -60,22 +63,26 @@ const JobDetails = () => {
     });
   };
 
-  const handleJob = async (e) => {
-    e.preventDefault();
-    setError('');
-
+  const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/user/get-job',
+      const response = await axios.get(
+        "http://localhost:5000/api/user/get-job",
         {
-          headers: { 'employee-id': localStorage.getItem('employeeId') }
+          headers: { "employee-id": localStorage.getItem("employeeId") },
         }
-      )
+      );
       const job = response.data.jobData;
       setJobs(Array.isArray(job) ? job : job ? [job] : []);
     } catch (error) {
-      setError(error.response?.data?.message || 'An error occured')
+      setError(
+        error.response?.data?.message || "An error occurred while fetching jobs"
+      );
     }
-  }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   return (
     <div>
@@ -85,23 +92,13 @@ const JobDetails = () => {
             Job Details
           </h2>
 
-          {saving ? (
+          {error && (
+            <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>
+          )}
+          {success && (
             <p className="text-green-500 mb-4 text-xs font-semibold">
-              Saving Emergency Details...
+              {success}
             </p>
-          ) : (
-            <>
-              {error && (
-                <p className="text-red-500 mb-4 text-xs font-semibold">
-                  {error}
-                </p>
-              )}
-              {success && (
-                <p className="text-green-500 mb-4 text-xs font-semibold">
-                  {success}
-                </p>
-              )}
-            </>
           )}
 
           <form className="flex flex-col" onSubmit={handleSubmit}>
@@ -228,48 +225,91 @@ const JobDetails = () => {
             <div className="flex mt-6 text-sm md:text-xs lg:text-xs justify-end">
               <button
                 type="submit"
-                className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full"
+                className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-xl"
+                disabled={saving}
               >
-                Save
+                {saving ? "Saving..." : "Save"}
               </button>
             </div>
           </form>
         </div>
       </div>
       <div className="bg-white mt-5 p-6 lg:p-5 w-full font-primary mx-auto rounded-xl shadow-md min-h-[8rem] lg:min-h-[15rem]">
-          <h2 className="text-base lg:text-sm font-semibold mb-4">
-            Records Found
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full table-auto font-secondary">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 border text-xs">Joined Date</th>
-                  <th className="px-4 py-2 border text-xs">Job Title</th>
-                  <th className="px-4 py-2 border text-xs">Job Specification</th>
-                  <th className="px-4 py-2 border text-xs">Job Category</th>
-                  <th className="px-4 py-2 border text-xs">Sub Unit</th>
-                  <th className="px-4 py-2 border text-xs">Location</th>
-                  <th className="px-4 py-2 border text-xs">Employment Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobs.map((job, index) => (
+        <h2 className="text-base lg:text-sm font-semibold mb-4">
+          ({jobs.length}) Records Found
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto font-secondary">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 text-xs">Joined Date</th>
+                <th className="px-4 py-2 text-xs">Job Title</th>
+                <th className="px-4 py-2 text-xs">Job Specification</th>
+                <th className="px-4 py-2 text-xs">Job Category</th>
+                <th className="px-4 py-2 text-xs">Sub Unit</th>
+                <th className="px-4 py-2 text-xs">Location</th>
+                <th className="px-4 py-2 text-xs">Employment Status</th>
+                <th className="px-4 py-2 text-xs">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {jobs.length > 0 ? (
+                jobs.slice(0, 5).map((job, index) => (
                   <tr key={index}>
-                    <td className="px-4 py-3 border text-xs">{job.joinedDate}</td>
-                    <td className="px-4 py-3 border text-xs">{job.jobTitle}</td>
-                    <td className="px-4 py-3 border text-xs">{job.jobSpecification}</td>
-                    <td className="px-4 py-3 border text-xs">{job.jobCategory}</td>
-                    <td className="px-4 py-3 border text-xs">{job.subUnit}</td>
-                    <td className="px-4 py-3 border text-xs">{job.location}</td>
-                    <td className="px-4 py-3 border text-xs">{job.employmentStatus}</td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {new Date(job.joinedDate).toLocaleDateString("en-US", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {job.jobTitle}
+                    </td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {job.jobSpecification}
+                    </td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {job.jobCategory}
+                    </td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {job.subUnit}
+                    </td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {job.location}
+                    </td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {job.employmentStatus}
+                    </td>
+                    <td className="text-xs space-x-2 text-center bg-yellow-200">
+                      <button
+                        className="px-1 py-1 bg-blue-500 text-white hover:bg-blue-600 transition duration-200
+                      rounded-2xl"
+                      >
+                        <EditIcon />
+                      </button>
+                      <button
+                        className="px-1 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
+                      rounded-2xl"
+                      >
+                        <DeleteIcon className="w-5 h-5" />
+                      </button>
+                    </td>
                   </tr>
-                ))}
-              </tbody> 
-
-            </table>
-
-          </div>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="px-4 py-3 text-center text-xs bg-yellow-200"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
