@@ -1,17 +1,20 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import CircularProgress from '@mui/material/CircularProgress';
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import CircularProgress from "@mui/material/CircularProgress";
+
+function truncateText(text, maxLength) {
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+}
 
 const UserManagement = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
-  const [userRole, setUserRole] = useState('');
-  const [status, setStatus] = useState('');
-  const [error, setError] = useState('');
+  const [userName, setUserName] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -20,33 +23,36 @@ const UserManagement = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/get-users', {
-        userName,
-        employeeId,
-        userRole,
-        status
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/admin/get-users",
+        {
+          userName,
+          employeeId,
+          userRole,
+          status,
+        }
+      );
       const user = response.data.user;
       setUsers(Array.isArray(user) ? user : user ? [user] : []);
       setCurrentPage(0); // Reset to first page on new search
     } catch (error) {
-      setError(error.response?.data?.message || 'An error occurred');
+      setError(error.response?.data?.message || "An error occurred");
     } finally {
-      setTimeout( ()=> {
+      setTimeout(() => {
         setLoading(false);
-      },500)
+      }, 500);
     }
   };
 
   const handleReset = () => {
-    setUserName('');
-    setEmployeeId('');
-    setStatus('');
-    setUserRole('');
+    setUserName("");
+    setEmployeeId("");
+    setStatus("");
+    setUserRole("");
     setUsers([]);
     setCurrentPage(0);
   };
@@ -63,23 +69,24 @@ const UserManagement = () => {
     }
   };
 
-  
   const displayedUsers = users.slice(
     currentPage * usersPerPage,
     currentPage * usersPerPage + usersPerPage
   );
 
   return (
-    <div> 
+    <div>
       <div className="container mx-auto font-primary overflow-auto shadow-md">
         <div className="bg-white p-6 lg:p-5 rounded-xl shadow-md">
           <h2 className="text-sm font-semibold mb-6">System Users</h2>
-          {error && <p className='text-red-500 mb-4 text-xs'>{error}</p>}
+          {error && <p className="text-red-500 mb-4 text-xs">{error}</p>}
 
-          <form className='flex flex-col' onSubmit={handleSearch}>
+          <form className="flex flex-col" onSubmit={handleSearch}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700">Username</label>
+                <label className="block text-xs font-medium text-gray-700">
+                  Username
+                </label>
                 <input
                   type="text"
                   placeholder="Username"
@@ -89,7 +96,9 @@ const UserManagement = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700">Employee ID</label>
+                <label className="block text-xs font-medium text-gray-700">
+                  Employee ID
+                </label>
                 <input
                   type="text"
                   placeholder="Employee Id"
@@ -99,7 +108,9 @@ const UserManagement = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700">User Role</label>
+                <label className="block text-xs font-medium text-gray-700">
+                  User Role
+                </label>
                 <select
                   className="text-xs mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
                   value={userRole}
@@ -111,7 +122,9 @@ const UserManagement = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700">Status</label>
+                <label className="block text-xs font-medium text-gray-700">
+                  Status
+                </label>
                 <select
                   className="text-xs mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500"
                   value={status}
@@ -125,11 +138,17 @@ const UserManagement = () => {
             </div>
 
             <div className="text-sm md:text-xs lg:text-xs mt-4 flex space-x-5">
-              <button type='submit' className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600">
+              <button
+                type="submit"
+                className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600"
+              >
                 Search
               </button>
-              <button type='button' className="bg-white border border-green-500 px-3 py-2 rounded-full hover:bg-yellow-500 hover:text-white hover:border-yellow-500"
-                onClick={handleReset}>
+              <button
+                type="button"
+                className="bg-white border border-green-500 px-3 py-2 rounded-full hover:bg-yellow-500 hover:text-white hover:border-yellow-500"
+                onClick={handleReset}
+              >
                 Reset
               </button>
             </div>
@@ -140,70 +159,100 @@ const UserManagement = () => {
           <div className="mt-4 text-sm md:text-xs lg:text-xs">
             <button
               className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600"
-              onClick={() => navigate('/admin/user-management/adduser')}
+              onClick={() => navigate("/admin/user-management/adduser")}
             >
               + Add
             </button>
           </div>
 
-          <h2 className=" text-base lg:text-sm font-semibold mb-4 mt-4">({users.length}) Records Found</h2>
-          <div className=''>
-          <table className="min-w-full table-auto font-secondary">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 text-xs">Username</th>
-                <th className="px-4 py-2 text-xs">Employee ID</th>
-                <th className="px-4 py-2 text-xs">User Role</th>
-                <th className="px-4 py-2 text-xs">Status</th>
-                <th className="px-4 py-2 text-xs">Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              { loading ? (
+          <h2 className=" text-base lg:text-sm font-semibold mb-4 mt-4">
+            ({users.length}) Records Found
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto font-secondary">
+              <thead>
                 <tr>
-                  <td colSpan='5' className='text-center py-8'>
-                    <CircularProgress/>
-                  </td>
+                  <th className="px-4 py-2 text-xs">Username</th>
+                  <th className="px-4 py-2 text-xs">Employee ID</th>
+                  <th className="px-4 py-2 text-xs">User Role</th>
+                  <th className="px-4 py-2 text-xs">Status</th>
+                  <th className="px-4 py-2 text-xs">Actions</th>
                 </tr>
-              ) : displayedUsers.length > 0 ? (
-                displayedUsers.map((user, index) => (
-                  <tr key={index}>
-                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.userName}</td>
-                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.employeeId}</td>
-                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.userRole}</td>
-                    <td className='px-4 py-3 text-xs text-center bg-yellow-200'>{user.status}</td>
-                    <td className='text-xs space-x-2 text-center bg-yellow-200'>
-                      <button className='px-1 py-1 bg-blue-500 text-white hover:bg-blue-600 transition duration-200
-                      rounded-2xl'>
-                        <EditIcon/>
-                        </button>
-                      <button className='px-1 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
-                      rounded-2xl'>
-                        <DeleteIcon className='w-5 h-5'/>
-                        </button>
+              </thead>
+
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="5" className="text-center py-8">
+                      <CircularProgress />
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center text-xs px-4 py-3 bg-yellow-200">No users found</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                ) : displayedUsers.length > 0 ? (
+                  displayedUsers.map((user, index) => (
+                    <tr key={index}>
+                      <td className="px-4 py-3 text-xs text-center bg-yellow-200">
+                        {truncateText(user.userName, 10)}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-center bg-yellow-200">
+                        {truncateText(user.employeeId, 10)}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-center bg-yellow-200">
+                        {user.userRole}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-center bg-yellow-200">
+                        {user.status}
+                      </td>
+                      <td
+                        className="text-xs lg:space-x-2 space-y-2 text-center bg-yellow-200
+                    sm:table-cell sm:justify-around"
+                      >
+                        <button
+                          className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
+                      rounded-lg text-xs sm:inline-block"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
+                      rounded-lg sm:inline-block"
+                        >
+                          <DeleteOutlineOutlinedIcon
+                            style={{ fontSize: "12px" }}
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="text-center text-xs px-4 py-3 bg-yellow-200"
+                    >
+                      No users found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
 
           <div className="mt-4">
             {currentPage > 0 && (
-              <button onClick={handlePrevPage} className="mr-2 px-4 py-2 bg-yellow-500 text-gray-700 rounded-full
-              hover:bg-yellow-600 text-xs hover:text-white">
+              <button
+                onClick={handlePrevPage}
+                className="mr-2 px-4 py-2 bg-yellow-500 text-gray-700 rounded-full
+              hover:bg-yellow-600 text-xs hover:text-white"
+              >
                 Prev
               </button>
             )}
             {(currentPage + 1) * usersPerPage < users.length && (
-              <button onClick={handleNextPage} className="px-4 py-2 bg-yellow-500 text-gray-700 rounded-full
-              hover:bg-yellow-600 text-xs hover:text-white">
+              <button
+                onClick={handleNextPage}
+                className="px-4 py-2 bg-yellow-500 text-gray-700 rounded-full
+              hover:bg-yellow-600 text-xs hover:text-white"
+              >
                 Next
               </button>
             )}

@@ -11,8 +11,7 @@ import Time from './components/Time';
 import Location from './components/Location';
 import Directory from './components/Directory';
 import AdminLayout from './AdminLayout';
-import UserInfo from './components/MyInfo'
-import MyInfo from './components/MyInfo';
+import MyInfo from './components/PersonalDetails';
 import UserLayout from './UserLayout';
 import UserManagement from './components/admin/UserManagement';
 import AddUser from './components/admin/AddUser';
@@ -22,6 +21,9 @@ import EmergencyDetails from './components/EmergencyDetails';
 import JobDetails from './components/JobDetails';
 import Salary from './components/Salary';
 import Qualification from './components/Qualification';
+import Report from './components/Report';
+import PersonalDetails from './components/PersonalDetails';
+import Apply from './components/leave/Apply';
 
 const App = () => {
   return (
@@ -50,12 +52,15 @@ const App = () => {
             <Route path='/admin/user-management' element={<UserManagement/>}/>
             <Route path='/admin/user-management/search' element={<UserManagement/>}/>
             <Route path='/admin/user-management/adduser' element={<AddUser/>} />
-            <Route path='/admin/my-info/personal/:userName/:_id/' element={<MyInfo/>} />
+            <Route path='/admin/my-info/personal/:userName/:_id/' element={<PersonalDetails/>} />
             <Route path='/admin/my-info/contact/' element={<ContactDetails/>} />
             <Route path='/admin/my-info/emergency/' element={<EmergencyDetails/>} />
             <Route path='/admin/my-info/job/' element={<JobDetails/>} />
             <Route path='/admin/my-info/salary/' element={<Salary/>} />
             <Route path='/admin/my-info/qualification/' element={<Qualification/>} />
+            <Route path='/admin/my-info/report/' element={<Report/>} />
+
+            <Route path='/admin/leave/apply/' element={<Apply/>} />
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>

@@ -21,6 +21,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
   const [myInfoDropdownOpen, setMyInfoDropdownOpen] = useState(false);
+  const [leaveDropdownOpen, setLeaveDropdownOpen] =useState(false);
 
   const navigate = useNavigate();
   const { _id, userName } = useAuth();
@@ -38,6 +39,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
 
   const toggleAdminDropdown = () => setAdminDropdownOpen(prev => !prev);
   const toggleMyInfoDropdown = () => setMyInfoDropdownOpen(prev => !prev);
+  const toggleLeaveDropdown = () => setLeaveDropdownOpen(prev => !prev)
   const toggleMenu = () => setMenuOpen(prev => !prev);
  
 
@@ -106,12 +108,50 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
           </li>
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'Leave' ? 'bg-green-100 text-green-700' : ''}`}
-            onClick={() => toggleDropdown('Leave')}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${leaveDropdownOpen ? 'bg-green-400 text-white font-semibold' : ''}`}
+            onClick={toggleLeaveDropdown}
           >
             <ExitToAppOutlinedIcon />
             <span className="ml-2">Leave</span>
+            <span className='ml-auto'>
+              {leaveDropdownOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowRightIcon />}
+            </span>
           </li>
+          {leaveDropdownOpen && (
+            <ul className='ml-12 space-y-1/4 transition-all duration-300 ease-in-out delay-800'>
+                <li
+                className={`px-4 py-2 cursor-pointer hover:text-green-500 transition-all
+                  duration-600 ease-in-out ${activeSubItem === 'APPLY LEAVE' ? 'text-green-700' : ''}`}
+                onClick={() => handleNavClick('APPLY LEAVE', `/admin/leave/apply/`, true)}
+              >
+                 Apply
+              </li>
+
+              <li
+                className={`px-4 py-2 cursor-pointer hover:text-green-500 transition-all
+                  duration-600 ease-in-out ${activeSubItem === 'APPLY LEAVE' ? 'text-green-700' : ''}`}
+                onClick={() => handleNavClick('APPLY LEAVE', `/admin/leave/apply/`, true)}
+              >
+                 My Leave
+              </li>
+
+              <li
+                className={`px-4 py-2 cursor-pointer hover:text-green-500 transition-all
+                  duration-600 ease-in-out ${activeSubItem === 'APPLY LEAVE' ? 'text-green-700' : ''}`}
+                onClick={() => handleNavClick('APPLY LEAVE', `/admin/leave/apply/`, true)}
+              >
+                 Entitlements
+              </li>
+
+              <li
+                className={`px-4 py-2 cursor-pointer hover:text-green-500 transition-all
+                  duration-600 ease-in-out ${activeSubItem === 'APPLY LEAVE' ? 'text-green-700' : ''}`}
+                onClick={() => handleNavClick('APPLY LEAVE', `/admin/leave/apply/`, true)}
+              >
+                 Report
+              </li>
+            </ul>
+          )}
 
           <li
             className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'Time' ? 'bg-green-100 text-green-700' : ''}`}
@@ -196,7 +236,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
               </li>
               <li
                 className={`px-4 py-2 cursor-pointer hover:text-green-500 ${activeSubItem === 'Report' ? 'text-green-700' : ''}`}
-                onClick={() => handleNavClick('Report', `/admin/user-management/${_id}`, true)}
+                onClick={() => handleNavClick('Report', '/admin/my-info/report/', true)}
               >
                 Report To
               </li>

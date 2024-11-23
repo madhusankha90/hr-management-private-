@@ -1,8 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
+
+function truncateText(text, maxLength) {
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+}
 
 const EmergencyDetails = () => {
   const [name, setName] = useState("");
@@ -77,16 +80,14 @@ const EmergencyDetails = () => {
           <h2 className="text-base lg:text-sm font-semibold mb-6">
             Emergency Contact Details
           </h2>
-              {error && (
-                <p className="text-red-500 mb-4 text-xs font-semibold">
-                  {error}
-                </p>
-              )}
-              {success && (
-                <p className="text-green-500 mb-4 text-xs font-semibold">
-                  {success}
-                </p>
-              )}
+          {error && (
+            <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>
+          )}
+          {success && (
+            <p className="text-green-500 mb-4 text-xs font-semibold">
+              {success}
+            </p>
+          )}
 
           <form className="flex flex-col" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -141,7 +142,7 @@ const EmergencyDetails = () => {
             </div>
             <div className="flex justify-end text-sm lg:text-xs mt-6">
               <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-xl">
-                { saving ? "Saving" : "Add" }
+                {saving ? "Saving" : "Add"}
               </button>
             </div>
           </form>
@@ -172,30 +173,42 @@ const EmergencyDetails = () => {
               ) : users.length > 0 ? (
                 users.map((user, main) => (
                   <tr key={main}>
-                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">{user.name}</td>
                     <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {user.relationship}
+                      {truncateText(user.name, 15)}
                     </td>
-                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">{user.mobile}</td>
-                    <td className="text-xs space-x-2 text-center bg-yellow-200">
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {truncateText(user.relationship, 15)}
+                    </td>
+                    <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {truncateText(user.mobile, 15)}
+                    </td>
+                    <td
+                      className="text-xs lg:space-x-2 space-y-2 text-center bg-yellow-200
+                    sm:table-cell sm:justify-around"
+                    >
                       <button
-                        className="px-1 py-1 bg-blue-500 text-white hover:bg-blue-600 transition duration-200
-                      rounded-2xl"
+                        className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
+                      rounded-lg text-xs sm:inline-block"
                       >
-                        <EditIcon />
+                        Edit
                       </button>
                       <button
-                        className="px-1 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
-                      rounded-2xl"
+                        className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
+                      rounded-lg sm:inline-block"
                       >
-                        <DeleteIcon className="w-5 h-5" />
+                        <DeleteOutlineOutlinedIcon
+                          style={{ fontSize: "12px" }}
+                        />
                       </button>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="text-center px-4 py-3 text-xs bg-yellow-200">
+                  <td
+                    colSpan="4"
+                    className="text-center px-4 py-3 text-xs bg-yellow-200"
+                  >
                     No records found
                   </td>
                 </tr>

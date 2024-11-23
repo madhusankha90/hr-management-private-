@@ -3,10 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./context/authContext";
 
-const MyInfo = () => {
+const PersonalDetails = () => {
   const navigate = useNavigate();
   const { login, personalId, userName, employeeId, _id } = useAuth();
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('')
   const [isUpdating, setIsUpdating] = useState(false);
   const [personalData, setPersonalData] = useState({
     firstName: '',
@@ -42,7 +43,9 @@ const MyInfo = () => {
       // if (personal.id) {
       //   localStorage.setItem('personalId', personal.id);
       // }
+      setSuccess(response.data.message);
       resetForm();
+      
       
     } catch (error) {
       setError(error.response?.data?.message || 'Error saving personal details');
@@ -51,7 +54,8 @@ const MyInfo = () => {
 
   const updatePersonalDetails = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/user/update-personal/${personalId}`, personalData);
+      const response = await axios.put(`http://localhost:5000/api/user/update-personal/${personalId}`, personalData);
+      setSuccess(response.data.message)
       resetForm();
     } catch (error) {
       setError(error.response?.data?.message || 'Error updating personal details');
@@ -86,7 +90,14 @@ const MyInfo = () => {
           <p className="text-gray-500 mb-8 text-sm lg:text-xs font-light">
             Your account is ready, you can now apply for advice...
           </p>
-          {error && <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>}
+          {error && (
+            <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>
+          )}
+          {success && (
+            <p className="text-green-500 mb-4 text-xs font-semibold">
+              {success}
+            </p>
+          )}
 
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="w-full lg:w-1/3 bg-green-50 p-6 rounded-lg overflow-auto">
@@ -106,7 +117,8 @@ const MyInfo = () => {
             </div>
 
             <div className="w-full lg:w-2/3 text-sm">
-              <form className="grid grid-cols-1 lg:grid-cols-2 gap-4" onSubmit={handleSubmit}>
+              <form className="flex flex-col" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName"
                   className="block text-gray-700 text-xs font-medium">Employee Name</label>
@@ -232,12 +244,13 @@ const MyInfo = () => {
                   </div>
                 </div>
                 <div className="flex justify-between mt-6 text-sm md:text-xs lg:text-xs col-span-2">
-                  <button type="button" className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-full">
+                  <button type="button" className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-xl">
                     Add
                   </button>
-                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
+                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-xl">
                     {isUpdating ? 'Update' : 'Save'}
                   </button>
+                </div>
                 </div>
               </form>
             </div>
@@ -248,4 +261,4 @@ const MyInfo = () => {
   );
 };
 
-export default MyInfo;
+export default PersonalDetails;

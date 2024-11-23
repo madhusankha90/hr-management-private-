@@ -1,7 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+
+function truncateText(text, maxLength) {
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+}
 
 const JobDetails = () => {
   const [error, setError] = useState("");
@@ -264,35 +267,40 @@ const JobDetails = () => {
                       })}
                     </td>
                     <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {job.jobTitle}
+                      {truncateText(job.jobTitle, 8)}
                     </td>
                     <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {job.jobSpecification}
+                      {truncateText(job.jobSpecification, 8)}
                     </td>
                     <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {job.jobCategory}
+                      {truncateText(job.jobCategory, 8)}
                     </td>
                     <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {job.subUnit}
+                      {truncateText(job.subUnit, 8)}
                     </td>
                     <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {job.location}
+                      {truncateText(job.location, 8)}
                     </td>
                     <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {job.employmentStatus}
+                      {truncateText(job.employmentStatus, 8)}
                     </td>
-                    <td className="text-xs space-x-2 text-center bg-yellow-200">
+                    <td
+                      className="text-xs lg:space-x-2 space-y-2 text-center bg-yellow-200
+                    sm:table-cell sm:justify-around"
+                    >
                       <button
-                        className="px-1 py-1 bg-blue-500 text-white hover:bg-blue-600 transition duration-200
-                      rounded-2xl"
+                        className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
+                      rounded-lg text-xs sm:inline-block"
                       >
-                        <EditIcon />
+                        Edit
                       </button>
                       <button
-                        className="px-1 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
-                      rounded-2xl"
+                        className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
+                      rounded-lg sm:inline-block"
                       >
-                        <DeleteIcon className="w-5 h-5" />
+                        <DeleteOutlineOutlinedIcon
+                          style={{ fontSize: "12px" }}
+                        />
                       </button>
                     </td>
                   </tr>
