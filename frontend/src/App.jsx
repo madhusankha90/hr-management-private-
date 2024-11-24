@@ -24,6 +24,8 @@ import Qualification from './components/Qualification';
 import Report from './components/Report';
 import PersonalDetails from './components/PersonalDetails';
 import Apply from './components/leave/Apply';
+import MyLeave from './components/leave/MyLeave';
+import Entitlement from './components/leave/Entitlement';
 
 const App = () => {
   return (
@@ -61,6 +63,8 @@ const App = () => {
             <Route path='/admin/my-info/report/' element={<Report/>} />
 
             <Route path='/admin/leave/apply/' element={<Apply/>} />
+            <Route path='/admin/leave/my-leave/' element={<MyLeave/>} />
+            <Route path='/admin/leave/entitlement/' element={<Entitlement/>} />
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>
