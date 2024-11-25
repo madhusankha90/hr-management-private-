@@ -30,7 +30,12 @@ const personalSchema = new mongoose.Schema(
     },
     photo: { 
       data: Buffer, 
-      contentType: String }
+      contentType: String 
+    },
+    employeeId: {
+      type: String,
+      required: true
+    }
   },
   {
     timestamps: true,

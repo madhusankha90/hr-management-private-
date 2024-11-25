@@ -6,7 +6,7 @@ const Entitlement = () => {
       <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
         <div className="bg-white p-6 lg:p-5 w-full font-primary">
           <h2 className="text-base lg:text-sm font-semibold mb-6">
-            My Leave List
+            My Leave Entitlements
           </h2>
           <form className="flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
@@ -57,7 +57,7 @@ const Entitlement = () => {
 
       <div className="bg-white mt-5 p-6 lg:p-5 w-full mx-auto rounded-xl shadow-md min-h-[10rem] lg:min-h-[18rem] overflow-auto">
       <h2 className="text-base lg:text-sm font-semibold mb-4 font-primary">
-          (12356) Records Found
+          (0) Records Found
         </h2>
         <div className="overflow-auto">
             <table className="min-w-full table-auto font-secondary">
@@ -71,6 +71,9 @@ const Entitlement = () => {
                     </tr>
                 </thead>
                 <tbody>
+                  <tr>
+                    <td colSpan="5" className="px-4 py-3 text-center text-xs bg-yellow-200">No records found</td>
+                  </tr>
 
                 </tbody>
 

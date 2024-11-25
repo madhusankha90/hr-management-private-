@@ -228,7 +228,7 @@ const JobDetails = () => {
             <div className="flex mt-6 text-sm md:text-xs lg:text-xs justify-end">
               <button
                 type="submit"
-                className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-xl"
+                className="w-[4rem] lg:w-[9rem] font-bold bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl"
                 disabled={saving}
               >
                 {saving ? "Saving..." : "Save"}

@@ -6,10 +6,6 @@ import PrivateRoute from './components/PrivateRoute';
 import UserDashboard from './components/UserDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
 import PunchIn from './components/admin/dashComponets/PunchIn';
-import Dashboard from './components/Dashboard';
-import Time from './components/Time';
-import Location from './components/Location';
-import Directory from './components/Directory';
 import AdminLayout from './AdminLayout';
 import MyInfo from './components/PersonalDetails';
 import UserLayout from './UserLayout';
@@ -26,6 +22,12 @@ import PersonalDetails from './components/PersonalDetails';
 import Apply from './components/leave/Apply';
 import MyLeave from './components/leave/MyLeave';
 import Entitlement from './components/leave/Entitlement';
+import Location from './components/location/Location';
+import Time from './components/time/Time';
+import Performance from './components/performance/Performance';
+import Dashboard from './components/dashboard/Dashboard';
+import Directory from './components/directory/Directory';
+import AllUsers from './components/admin/AllUsers';
 
 const App = () => {
   return (
@@ -51,9 +53,12 @@ const App = () => {
 
           <Route path='/admin' element={<AdminLayout/>}>
             <Route path='/admin/admin-dashboard' element={<AdminDashboard/>}/>
+
             <Route path='/admin/user-management' element={<UserManagement/>}/>
             <Route path='/admin/user-management/search' element={<UserManagement/>}/>
             <Route path='/admin/user-management/adduser' element={<AddUser/>} />
+            <Route path='/admin/user-management/all-users/' element={<AllUsers/>} />
+
             <Route path='/admin/my-info/personal/:userName/:_id/' element={<PersonalDetails/>} />
             <Route path='/admin/my-info/contact/' element={<ContactDetails/>} />
             <Route path='/admin/my-info/emergency/' element={<EmergencyDetails/>} />
@@ -65,6 +70,13 @@ const App = () => {
             <Route path='/admin/leave/apply/' element={<Apply/>} />
             <Route path='/admin/leave/my-leave/' element={<MyLeave/>} />
             <Route path='/admin/leave/entitlement/' element={<Entitlement/>} />
+
+            <Route path='/admin/location/' element={<Location/>} />
+            <Route path='/admin/time/' element={<Time/>} />
+            <Route path='/admin/performance/' element={<Performance/>} />
+            <Route path='/admin/dashboard/' element={<Dashboard/>} />
+            <Route path='/admin/directory/' element={<Directory/>} />
+
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>

@@ -3,7 +3,7 @@ const { createPersonal, updatePersonal, createEmergency, getEmergency, createJob
 const router = express.Router();
 
 router.post('/create-personal', createPersonal);
-router.put('/update-personal/:_id', updatePersonal);
+router.put('/update-personal/:employeeId', updatePersonal);
 
 router.post('/create-emergency', createEmergency);
 router.get('/get-emergency', getEmergency);

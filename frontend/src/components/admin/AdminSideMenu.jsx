@@ -65,7 +65,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
 
         <ul className="space-y-2">
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-700 focus:bg-green-500 ${adminDropdownOpen ? 'bg-green-600 text-white'
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 focus:bg-green-700 ${adminDropdownOpen ? 'bg-green-500 text-white'
            : ''} `}
             onClick={toggleAdminDropdown}
           >
@@ -92,7 +92,7 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
               </li>
               <li
                 className={`px-4 py-2 cursor-pointer hover:text-green-500 ${activeSubItem === 'All' ? 'text-green-700' : ''}`}
-                onClick={() => handleNavClick('All', '/admin/user-management/all', true)}
+                onClick={() => handleNavClick('All', '/admin/user-management/all-users/', true)}
               >
                 All Users
               </li>
@@ -100,15 +100,15 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
           )}
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'Dashboard' ? 'bg-green-100 text-green-700' : ''}`}
-            onClick={() => handleNavClick('Dashboard', '/dashboard')}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${activeItem === 'Dashboard' ? 'bg-green-100 text-green-700' : ''}`}
+            onClick={() => handleNavClick('Dashboard', '/admin/dashboard/')}
           >
             <HomeOutlinedIcon className='w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6'/>
             <span className="ml-2">Dashboard</span>
           </li>
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${leaveDropdownOpen ? 'bg-green-400 text-white font-semibold' : ''}`}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${leaveDropdownOpen ? 'bg-green-500 text-white font-semibold' : ''}`}
             onClick={toggleLeaveDropdown}
           >
             <ExitToAppOutlinedIcon />
@@ -154,39 +154,39 @@ const AdminSideMenu = ({ setActiveMenuItem }) => {
           )}
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'Time' ? 'bg-green-100 text-green-700' : ''}`}
-            onClick={() => handleNavClick('Time', '/time')}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${activeItem === 'Time' ? 'bg-green-100 text-green-700' : ''}`}
+            onClick={() => handleNavClick('Time', '/admin/time/')}
           >
             <AccessTimeOutlinedIcon />
             <span className="ml-2">Time</span>
           </li>
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'Performance' ? 'bg-green-100 text-green-700' : ''}`}
-            onClick={() => handleNavClick('Performance', '/performance')}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${activeItem === 'Performance' ? 'bg-green-100 text-green-700' : ''}`}
+            onClick={() => handleNavClick('Performance', '/admin/performance/')}
           >
             <MilitaryTechOutlinedIcon />
             <span className="ml-2">Performance</span>
           </li>
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'Location' ? 'bg-green-100 text-green-700' : ''}`}
-            onClick={() => handleNavClick('Location', '/location')}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${activeItem === 'Location' ? 'bg-green-100 text-green-700' : ''}`}
+            onClick={() => handleNavClick('Location', '/admin/location/')}
           >
             <LocationOnOutlinedIcon />
             <span className="ml-2">Location</span>
           </li>
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${activeItem === 'Directory' ? 'bg-green-100 text-green-700' : ''}`}
-            onClick={() => handleNavClick('Directory', '/directory')}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${activeItem === 'Directory' ? 'bg-green-100 text-green-700' : ''}`}
+            onClick={() => handleNavClick('Directory', '/admin/directory/')}
           >
             <ArticleOutlinedIcon />
             <span className="ml-2">Directory</span>
           </li>
 
           <li
-            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-50 ${myInfoDropdownOpen ? 'bg-green-300 text-white font-semibold' : ''}`}
+            className={`px-6 py-2 flex items-center cursor-pointer hover:bg-green-600 ${myInfoDropdownOpen ? 'bg-green-500 text-white font-semibold' : ''}`}
             onClick={toggleMyInfoDropdown}
           >
             <Person2OutlinedIcon />

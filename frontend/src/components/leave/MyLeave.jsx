@@ -56,10 +56,10 @@ const MyLeave = () => {
               </div>
             </div>
             <div className="flex justify-end text-sm lg:text-xs mt-6 gap-4">
-              <button className="w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-bold">
+              <button className="w-[4rem] lg:w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-bold">
                 Reset
               </button>
-              <button className="w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-bold">
+              <button className="w-[4rem] lg:w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-bold">
                 Search
               </button>
             </div>
@@ -69,7 +69,7 @@ const MyLeave = () => {
 
       <div className="bg-white mt-5 p-6 lg:p-5 w-full mx-auto rounded-xl shadow-md min-h-[10rem] lg:min-h-[18rem] overflow-auto">
       <h2 className="text-base lg:text-sm font-semibold mb-4 font-primary">
-          (12356) Records Found
+          (0) Records Found
         </h2>
         <div className="overflow-auto">
             <table className="min-w-full table-auto font-secondary">
@@ -84,7 +84,10 @@ const MyLeave = () => {
                     </tr>
                 </thead>
                 <tbody>
-
+                    <tr>
+                      <td colSpan="6"
+                      className="px-4 py-3 text-xs bg-yellow-200 text-center">No records found</td>
+                    </tr>
                 </tbody>
 
             </table>

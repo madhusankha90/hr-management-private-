@@ -147,10 +147,10 @@ const ContactDetails = () => {
           </div>
 
           <div className="flex justify-between items-center my-6 text-sm lg:text-xs mt-6">
-            <button className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-full">
+            <button className="w-[4rem] lg:w-[9rem] bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-xl">
               Add
             </button>
-            <button type="submit" className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
+            <button type="submit" className="w-[4rem] lg:w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl">
               Save
             </button>
           </div>

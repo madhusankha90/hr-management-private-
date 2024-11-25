@@ -15,6 +15,7 @@ const createPersonal = async (req, res) => {
   //   }
   // })
   const { firstName, lastName, nic, nationality, maritalStatus, dob, gender } = req.body;
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
 
   try {
     if (!firstName || !nic || !nationality || !dob ) {
@@ -28,6 +29,7 @@ const createPersonal = async (req, res) => {
       maritalStatus, 
       dob, 
       gender,
+      employeeId
       // photo: req.file ? {
       //   data: fs.readFileSync(req.file.path),
       //   contentType: req.file.mimetype
@@ -37,9 +39,7 @@ const createPersonal = async (req, res) => {
     res.status(201).json({
       success: true,
       message : "Personal Details Saved Successfully",
-      personal: {
-        id: personal._id,
-      }
+      personal
     })
   } catch (error) {
     res.status(400).json({
@@ -51,7 +51,7 @@ const createPersonal = async (req, res) => {
 }
 
 const updatePersonal = async (req, res) => {
-  const { _id } = req.params;
+  const { employeeId } = req.params;
   const { firstName, lastName, nic, nationality, maritalStatus, dob, gender } = req.body;
 
   const updateData = {};
@@ -65,8 +65,8 @@ const updatePersonal = async (req, res) => {
 
 
   try {
-    const update = await PersonalDetail.findByIdAndUpdate(
-      _id,
+    const update = await PersonalDetail.find(
+      employeeId,
       updateData,
       { new: true, runValidators:true}
     );

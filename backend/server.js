@@ -6,6 +6,7 @@ const ConnectDb = require('./dbConnect');
 const employeeRouter = require('./routes/employeeRouter')
 const uploadRouter = require('./routes/uploadRouter')
 const userRouter = require('./routes/userRoutes');
+const leaveRouter = require('./routes/leaveRoutes')
 
 require('dotenv').config();
 
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 app.use('/api/admin',userRouter );
 app.use('/api/user', employeeRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/leave', leaveRouter);
 
 
 

@@ -1,94 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import { useAuth } from "./context/authContext";
+import React from 'react'
 
-const PersonalDetails = () => {
-  const navigate = useNavigate();
-  const { login, personalId, userName, employeeId, _id } = useAuth();
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('')
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [personalData, setPersonalData] = useState({
-    firstName: '',
-    lastName: '',
-    nic: '',
-    nationality: '',
-    maritalStatus: '',
-    dob: '',
-    gender: ''
-  });
-
-  const handleChange = (e) => {
-    setPersonalData({
-      ...personalData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleGenderChange = (e) => {
-    setPersonalData({
-      ...personalData,
-      gender: e.target.value,
-    });
-  };
-
-  const createPersonalDetails = async () => {
-    try {
-      const response = await axios.post('http://localhost:5000/api/user/create-personal/', personalData,
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        });
-      // const { personal } = response.data;
-      // login(personal.id)
-      // localStorage.setItem('personal_Id', personal.id);
-      // login(employeeId, userName, _id, token, role, personal.id);
-      // if (personal.id) {
-      //   localStorage.setItem('personalId', personal.id);
-      // }
-      setSuccess(response.data.message);
-      resetForm();
-      
-      
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error saving personal details');
-    }
-  };
-
-  const updatePersonalDetails = async () => {
-    try {
-      const response = await axios.put(`http://localhost:5000/api/user/update-personal/${employeeId}`, personalData,
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        }
-      );
-      setSuccess(response.data.message)
-      resetForm();
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error updating personal details');
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    isUpdating ? updatePersonalDetails() : createPersonalDetails();
-  };
-
-  const resetForm = () => {
-    setPersonalData({
-      firstName: '',
-      lastName: '',
-      nic: '',
-      nationality: '',
-      maritalStatus: '',
-      dob: '',
-      gender: ''
-    });
-    setError('');
-  };
-
-  const nationalities = ["Sinhala", "Tamil", "Muslim"];
-
+const UpdatePersonalDetails = () => {
   return (
     <div>   
       <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
@@ -265,7 +177,7 @@ const PersonalDetails = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PersonalDetails;
+export default UpdatePersonalDetails

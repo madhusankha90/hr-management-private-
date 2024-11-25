@@ -141,7 +141,7 @@ const EmergencyDetails = () => {
               </div>
             </div>
             <div className="flex justify-end text-sm lg:text-xs mt-6">
-              <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-xl">
+              <button className="w-[4rem] lg:w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-bold">
                 {saving ? "Saving" : "Add"}
               </button>
             </div>

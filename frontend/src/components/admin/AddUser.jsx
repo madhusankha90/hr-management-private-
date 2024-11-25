@@ -188,10 +188,10 @@ const AddUser = () => {
             </div>
           </div>
 
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-end mt-6">
             <button
               type="submit"
-              className="px-3 py-2 bg-green-500 rounded-full hover:bg-green-600 transition-all text-xs
+              className="w-[4rem] lg:w-[9rem] py-2 bg-green-500 rounded-xl hover:bg-green-600 transition-all text-xs font-bold
               text-white"
             >
               {saving ? "Saving" : "Save"}

@@ -137,16 +137,16 @@ const UserManagement = () => {
               </div>
             </div>
 
-            <div className="text-sm md:text-xs lg:text-xs mt-4 flex space-x-5">
+            <div className="text-sm md:text-xs lg:text-xs mt-6 flex space-x-5">
               <button
                 type="submit"
-                className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600"
+                className="bg-green-500 text-white w-[4rem] lg:w-[9rem] py-2 rounded-xl hover:bg-green-600 font-bold"
               >
                 Search
               </button>
               <button
                 type="button"
-                className="bg-white border border-green-500 px-3 py-2 rounded-full hover:bg-yellow-500 hover:text-white hover:border-yellow-500"
+                className="bg-white border border-green-500 w-[4rem] lg:w-[9rem] py-2 rounded-xl hover:bg-yellow-500 hover:text-white hover:border-yellow-500 font-bold"
                 onClick={handleReset}
               >
                 Reset
@@ -158,7 +158,7 @@ const UserManagement = () => {
         <div className="bg-white mt-5 p-6 lg:p-5 rounded-xl mx-auto min-h-[10rem] lg:min-h-[18rem]">
           <div className="mt-4 text-sm md:text-xs lg:text-xs">
             <button
-              className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600"
+              className="bg-green-500 text-white w-[4rem] lg:w-[9rem] py-2 rounded-xl hover:bg-green-600 font-bold"
               onClick={() => navigate("/admin/user-management/adduser")}
             >
               + Add
