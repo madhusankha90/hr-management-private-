@@ -2,6 +2,7 @@ const PersonalDetail = require('../models/personalDetailsModel');
 const { uploadProfilePic } = require('./profilePicController');
 const EmergencyDetail = require('../models/emergencyDetailsModel');
 const JobDetail = require('../models/JobDetailsModel');
+const ContactDetail = require('../models/myInfoModels/contactDetailsModel');
 
 const createPersonal = async (req, res) => {
 
@@ -65,28 +66,47 @@ const updatePersonal = async (req, res) => {
 
 
   try {
-    const update = await PersonalDetail.find(
-      employeeId,
+    const updatePersonal = await PersonalDetail.findOneAndUpdate(
+      {employeeId},
       updateData,
       { new: true, runValidators:true}
     );
 
-    if (!update){
+    if (!updatePersonal){
       return res.status(404).json({
         success: false,
-        message: "personal details not found"
+        message: "personal details not found",
+        employeeId
       })
     }
 
     res.status(200).json({
       success: true,
-      message: "personal details updated"
+      message: "Personal details updated",
+      updatePersonal
     })
 
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "updating peronal details",
+      message: "Error updating peronal details",
+      error: error.message
+    })
+  }
+}
+
+const getPersonal = async (req, res) => {
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
+  try {
+    const getPersonal = await PersonalDetail.findOne({employeeId})
+    res.status(201).json({
+      success: true,
+      getPersonal
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Error getting personal details",
       error: error.message
     })
   }
@@ -192,5 +212,49 @@ const getJob = async (req, res) => {
   }
 }
 
+const createContact = async (req, res) => {
+  const { streetOne, streetTwo, city, state, zip, country, homeTele, mobile, workTele, workEmail, otherEmail } = req.body;
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
+  try {
+    if (!streetOne || !city || !state || !zip || !country || !mobile || !workEmail || !otherEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "All field are Required"
+      })
+    }
+    const contact = new ContactDetail({
+      streetOne, 
+      streetTwo, 
+      city, 
+      state, 
+      zip, 
+      country, 
+      homeTele, 
+      mobile, 
+      workTele, 
+      workEmail, 
+      otherEmail,
+      employeeId
+    })
+    await contact.save();
+    res.status(201).json({
+      success: true,
+      message: "Contact Details Saved"
+    });
 
-module.exports = { createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob};
+  } catch (error) {
+    res.staus(500).json({
+      success: false,
+      message: "Contact Details Saving Error",
+      error: error.message
+    })
+  }
+}
+
+// const updateContact = async(req, res) =>  {
+//     const { employeeId}
+// }
+
+module.exports = { createPersonal, updatePersonal, getPersonal, createEmergency, getEmergency, createJob, getJob,
+  createContact
+};
