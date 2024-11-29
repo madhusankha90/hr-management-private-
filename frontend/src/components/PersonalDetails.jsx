@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./context/authContext";
 
 const PersonalDetails = () => {
-  const navigate = useNavigate();
   const { login, personalId, userName, employeeId, _id } = useAuth();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('')
@@ -18,6 +16,24 @@ const PersonalDetails = () => {
     dob: '',
     gender: ''
   });
+
+  useEffect(() => {
+    const fetchPersonalDetails = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/user/get-personal', {
+          headers: { "employee-id": localStorage.getItem("employeeId") },
+        });
+        if (response.data.getPersonal) {
+          setPersonalData(response.data.getPersonal);
+          setIsUpdating(true);
+        }
+      } catch (error) {
+        setError(error.response?.data?.message || 'Error fetching personal details');
+      }
+    };
+
+    fetchPersonalDetails();
+  }, []);
 
   const handleChange = (e) => {
     setPersonalData({
@@ -33,45 +49,24 @@ const PersonalDetails = () => {
     });
   };
 
-  const createPersonalDetails = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/user/create-personal/', personalData,
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        });
-      // const { personal } = response.data;
-      // login(personal.id)
-      // localStorage.setItem('personal_Id', personal.id);
-      // login(employeeId, userName, _id, token, role, personal.id);
-      // if (personal.id) {
-      //   localStorage.setItem('personalId', personal.id);
-      // }
+      const url = isUpdating
+        ? `http://localhost:5000/api/user/update-personal/${employeeId}`
+        : `http://localhost:5000/api/user/create-personal/${employeeId}`;
+      const method = isUpdating ? 'put' : 'post';
+
+      const response = await axios[method](url, personalData, {
+        headers: { "employee-id": localStorage.getItem("employeeId") },
+      });
+
       setSuccess(response.data.message);
       resetForm();
-      
-      
+      setIsUpdating(false);
     } catch (error) {
-      setError(error.response?.data?.message || 'Error saving personal details');
+      setError(error.response?.data?.message || 'Error Submiting personal details');
     }
-  };
-
-  const updatePersonalDetails = async () => {
-    try {
-      const response = await axios.put(`http://localhost:5000/api/user/update-personal/${employeeId}`, personalData,
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        }
-      );
-      setSuccess(response.data.message)
-      resetForm();
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error updating personal details');
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    isUpdating ? updatePersonalDetails() : createPersonalDetails();
   };
 
   const resetForm = () => {
@@ -115,7 +110,7 @@ const PersonalDetails = () => {
                   className="rounded-full w-28 h-28 mb-4"
                 />
                 <h3 className="text-base lg:text-base font-semibold">CTO</h3>
-                <p className="text-gray-700 text-sm lg:text-sm uppercase">{userName}</p>
+                <p className="text-gray-700 text-sm lg:text-sm uppercase">{personalData.firstName}</p>
                 <p className="text-gray-500">{employeeId}</p>
                 <p className="text-gray-500">{_id}</p>
                 <p className="text-gray-500">2001-11-16</p>

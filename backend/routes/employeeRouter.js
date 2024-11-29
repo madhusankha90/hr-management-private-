@@ -1,5 +1,5 @@
 const express = require('express');
-const { createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob, getPersonal, createContact } = require('../controllers/employeeContoller');
+const { createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob, getPersonal, createContact, updateContact, getContact } = require('../controllers/employeeContoller');
 const router = express.Router();
 
 router.get('/get-personal', getPersonal);
@@ -12,7 +12,9 @@ router.get('/get-emergency', getEmergency);
 router.post('/create-job', createJob);
 router.get('/get-job', getJob);
 
-router.post('/create-contact', createContact)
+router.post('/create-contact', createContact);
+router.put('/update-contact', updateContact);
+router.get('/get-contact', getContact);
 
 
 

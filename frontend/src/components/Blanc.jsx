@@ -1,199 +1,267 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "./context/authContext";
 
-const EmergencyDetails = () => {
-  const [name, setName] = useState("");
-  const [relationship, setRelationship] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
+const PersonalDetails = () => {
+  const navigate = useNavigate();
+  const { login, personalId, userName, employeeId, _id } = useAuth();
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('')
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [personalData, setPersonalData] = useState({
+    firstName: '',
+    lastName: '',
+    nic: '',
+    nationality: '',
+    maritalStatus: '',
+    dob: '',
+    gender: ''
+  });
 
-  useEffect(() => {
-    handleEmergency();
-  }, []);
+  const handleChange = (e) => {
+    setPersonalData({
+      ...personalData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSaving(true);
-    setSuccess("");
-    
+  const handleGenderChange = (e) => {
+    setPersonalData({
+      ...personalData,
+      gender: e.target.value,
+    });
+  };
 
+  const createPersonalDetails = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/user/create-emergency",
+      const response = await axios.post('http://localhost:5000/api/user/create-personal/', personalData,
         {
-          name,
-          relationship,
-          mobile,
-        }, {
-            headers: { 'employee-id': localStorage.getItem('employeeId') }
-        }
-      );
+          headers: { "employee-id": localStorage.getItem("employeeId") },
+        });
       setSuccess(response.data.message);
-      setName("");
-      setRelationship("");
-      setMobile("");
-      handleEmergency();
+      resetForm();
+      
       
     } catch (error) {
-      setError(error.response?.data?.message || "An error occurred");
-    } finally {
-      setTimeout(() => {
-        setSaving(false);
-      }, 700);
+      setError(error.response?.data?.message || 'Error saving personal details');
     }
   };
 
-  const handleEmergency = async () => {
-    setLoading(true);
-    setError("");
-
+  const updatePersonalDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/user/get-emergency",{
-            headers: { 'employee-id': localStorage.getItem('employeeId') }
-          }
+      const response = await axios.put(`http://localhost:5000/api/user/update-personal/${employeeId}`, personalData,
+        {
+          headers: { "employee-id": localStorage.getItem("employeeId") },
+        }
       );
-      const user = response.data.emergencyData;
-    setUsers(Array.isArray(user) ? user : user ? [user] : []);
+      setSuccess(response.data.message)
+      resetForm();
     } catch (error) {
-      setError(error.response?.data?.message || "An error occurred");
-    } finally {
-      setLoading(false);
+      setError(error.response?.data?.message || 'Error updating personal details');
     }
   };
+
+  const handleSubmit = asyn () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/user/update-personal/${employeeId}`)
+    } catch (error) {
+      
+    }
+  };
+
+  const resetForm = () => {
+    setPersonalData({
+      firstName: '',
+      lastName: '',
+      nic: '',
+      nationality: '',
+      maritalStatus: '',
+      dob: '',
+      gender: ''
+    });
+    setError('');
+  };
+
+  const nationalities = ["Sinhala", "Tamil", "Muslim"];
 
   return (
-    <div>
+    <div>   
       <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
         <div className="bg-white p-6 lg:p-5 w-full font-primary">
-          <h2 className="text-base lg:text-sm font-semibold mb-6">
-            Emergency Contact Details
-          </h2>
-
-          { saving ? (
+          <h2 className="text-base lg:text-sm font-semibold mb-2 uppercase">{userName}</h2>
+          <p className="text-gray-500 mb-8 text-sm lg:text-xs font-light">
+            Your account is ready, you can now apply for advice...
+          </p>
+          {error && (
+            <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>
+          )}
+          {success && (
             <p className="text-green-500 mb-4 text-xs font-semibold">
-              Saving Emergency Details...
+              {success}
             </p>
-          ) : (
-            <>
-          {error && <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>}
-          {success && <p className="text-green-500 mb-4 text-xs font-semibold">{success}</p>}
-          </>
           )}
 
-          <form className="flex flex-col" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="w-full lg:w-1/3 bg-green-50 p-6 rounded-lg overflow-auto">
+              <div className="flex flex-col items-center">
+                <img
+                  src="https://via.placeholder.com/150"
+                  alt="Profile"
+                  className="rounded-full w-28 h-28 mb-4"
                 />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Relationship
-                </label>
-                <input
-                  type="text"
-                  placeholder="Relationship"
-                  value={relationship}
-                  onChange={(e) => setRelationship(e.target.value)}
-                  className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700">
-                  Mobile
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter Mobile"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
-                />
-              </div>
-              <div className="text-sm lg:text-xs mt-6">
-                <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-full">
-                  Add
-                </button>
+                <h3 className="text-base lg:text-base font-semibold">CTO</h3>
+                <p className="text-gray-700 text-sm lg:text-sm uppercase">{userName}</p>
+                <p className="text-gray-500">{employeeId}</p>
+                <p className="text-gray-500">{_id}</p>
+                <p className="text-gray-500">2001-11-16</p>
+                <p className="text-gray-500">Sri Lankan</p>
               </div>
             </div>
-          </form>
-        </div>
-      </div>
 
-      <div className="bg-white mt-5 p-6 lg:p-5 w-full font-primary mx-auto rounded-xl shadow-md min-h-[10rem] lg:min-h-[18rem]">
-        <h2 className="text-base lg:text-sm font-semibold mb-4">
-          Records Found
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto font-secondary ">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 border text-xs">Name</th>
-                <th className="px-4 py-2 border text-xs">Relationship</th>
-                <th className="px-4 py-2 border text-xs">Mobile</th>
-                <th className="px-4 py-2 border text-xs">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="4" className="text-center py-8">
-                    <CircularProgress />
-                  </td>
-                </tr>
-              ) : users.length > 0 ? (
-                users.map((user, main) => (
-                  <tr key={main}>
-                    <td className="px-4 py-3 border text-xs">{user.name}</td>
-                    <td className="px-4 py-3 border text-xs">
-                      {user.relationship}
-                    </td>
-                    <td className="px-4 py-3 border text-xs">{user.mobile}</td>
-                    <td className="border text-xs space-x-2 text-center">
-                      <button
-                        className="px-1 py-1 bg-blue-500 text-white hover:bg-blue-600 transition duration-200
-                      rounded-2xl"
-                      >
-                        <EditIcon />
-                      </button>
-                      <button
-                        className="px-1 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
-                      rounded-2xl"
-                      >
-                        <DeleteIcon className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="text-center py-8 text-sm">
-                    No Emergency Records Found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+            <div className="w-full lg:w-2/3 text-sm">
+              <form className="flex flex-col" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="firstName"
+                  className="block text-gray-700 text-xs font-medium">Employee Name</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    placeholder="First Name"
+                    value={personalData.firstName}
+                    onChange={handleChange}
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+                  />
+                </div>
+                <div className="mt-auto">
+                  <input
+                    type="text"
+                    name="lastName"
+                    placeholder="Last Name"
+                    value={personalData.lastName}
+                    onChange={handleChange}
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 text-xs font-medium">Employee Id</label>
+                  <input
+                    type="text"
+                    value={employeeId}
+                    readOnly
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="nic"
+                  className="block text-gray-700 text-xs font-medium">NIC</label>
+                  <input
+                    type="text"
+                    id="nic"
+                    name="nic"
+                    placeholder="NIC Number"
+                    value={personalData.nic}
+                    onChange={handleChange}
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="nationality"
+                  className="block text-gray-700 text-xs font-medium">Nationality</label>
+                  <select
+                    id="nationality"
+                    name="nationality"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+                    value={personalData.nationality}
+                    onChange={handleChange}
+                  >
+                    <option value="">-- Select --</option>
+                    {nationalities.map((national) => (
+                      <option key={national} value={national}>{national}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="maritalStatus"
+                  className="block text-gray-700 text-xs font-medium">Marital Status</label>
+                  <select
+                    id="maritalStatus"
+                    name="maritalStatus"
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+                    value={personalData.maritalStatus}
+                    onChange={handleChange}
+                  >
+                    <option value="">-- Select --</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="dob"
+                  className="block text-gray-700 text-xs font-medium">Date of Birth</label>
+                  <input
+                    id="dob"
+                    type="date"
+                    name="dob"
+                    value={personalData.dob}
+                    onChange={handleChange}
+                    className="w-full border focus:border-yellow-500 rounded-xl p-4 lg:p-3 mt-1 text-xs block focus:outline-none border-gray-300"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 text-xs font-medium">Gender</label>
+                  <div className="mt-1">
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="Male"
+                        checked={personalData.gender === 'Male'}
+                        onChange={handleGenderChange}
+                        className="form-radio"
+                      />
+                      <span className="ml-2 text-xs font-medium">Male</span>
+                    </label>
+                    <label className="inline-flex items-center ml-6">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="Female"
+                        checked={personalData.gender === 'Female'}
+                        onChange={handleGenderChange}
+                        className="form-radio"
+                      />
+                      <span className="ml-2 text-xs font-medium">Female</span>
+                    </label>
+                  </div>
+                </div>
+                <div className="flex justify-between mt-6 text-sm md:text-xs lg:text-xs col-span-2">
+                  <button type="button" className="w-[4rem] lg:w-[9rem] bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-xl font-bold">
+                    Add
+                  </button>
+                  <button type="submit" className="w-[4rem] lg:w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-bold">
+                    {isUpdating ? 'Update' : 'Save'}
+                  </button>
+                </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default EmergencyDetails;
+export default PersonalDetails;

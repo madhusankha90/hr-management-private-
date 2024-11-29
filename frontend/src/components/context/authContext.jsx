@@ -31,14 +31,14 @@ export const AuthProvider = ({ children }) => {
         setPersonalId(loginData.personalId);
       }
     
-        localStorage.setItem("employeeId", JSON.stringify(loginData.employeeId));
-        localStorage.setItem("userName", JSON.stringify(loginData.userName));
-        localStorage.setItem("_id", JSON.stringify(loginData._id));
-        localStorage.setItem("token", JSON.stringify(loginData.token));
-        localStorage.setItem("role", JSON.stringify(loginData.role));
+        localStorage.setItem("employeeId", loginData.employeeId);
+        localStorage.setItem("userName", loginData.userName);
+        localStorage.setItem("_id", loginData._id);
+        localStorage.setItem("token", loginData.token);
+        localStorage.setItem("role", loginData.role);
 
         if (pId) {
-          localStorage.setItem("personal_Id", JSON.stringify(loginData.personalId));
+          localStorage.setItem("personal_Id", loginData.personalId);
         }
     };
   

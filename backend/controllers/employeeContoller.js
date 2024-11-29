@@ -52,7 +52,7 @@ const createPersonal = async (req, res) => {
 }
 
 const updatePersonal = async (req, res) => {
-  const { employeeId } = req.params;
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
   const { firstName, lastName, nic, nationality, maritalStatus, dob, gender } = req.body;
 
   const updateData = {};
@@ -75,14 +75,14 @@ const updatePersonal = async (req, res) => {
     if (!updatePersonal){
       return res.status(404).json({
         success: false,
-        message: "personal details not found",
+        message: "personal Details not Found",
         employeeId
       })
     }
 
     res.status(200).json({
       success: true,
-      message: "Personal details updated",
+      message: "Personal Details Updated",
       updatePersonal
     })
 
@@ -99,12 +99,12 @@ const getPersonal = async (req, res) => {
   const employeeId = req.user?.employeeId || req.headers['employee-id'];
   try {
     const getPersonal = await PersonalDetail.findOne({employeeId})
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       getPersonal
     })
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
       message: "Error getting personal details",
       error: error.message
@@ -163,7 +163,7 @@ const createJob = async (req, res) => {
     if (!joinedDate || !jobTitle || !jobSpecification || !jobCategory || !subUnit || !location || !employmentStatus) {
       return res.status(400).json({
         success: false,
-        message: "All fields are Required",
+        message: "All fields are required",
       })
     }
     const job = new JobDetail({
@@ -179,22 +179,22 @@ const createJob = async (req, res) => {
     await job.save();
     res.status(201).json({
       success: true,
-      message: "Job Details Saved Successfully",
+      message: "Job Details saved successfully",
     })
   
 
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Job Details saving error",
       error: error.message,
     })
   }
 }
 
 const getJob = async (req, res) => {
+  const employeeId = req.user?.employeeId || req.headers['employee-id']
   try {
-    const employeeId = req.user?.employeeId || req.headers['employee-id']
     if (!employeeId) {
       return res.status(400).json({
         success: false,
@@ -202,7 +202,10 @@ const getJob = async (req, res) => {
       });
     }
     const jobData = await JobDetail.find({ employeeId});
-    res.json( { jobData } );
+    res.status(200).json({ 
+      success: true,
+      jobData, 
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -216,10 +219,10 @@ const createContact = async (req, res) => {
   const { streetOne, streetTwo, city, state, zip, country, homeTele, mobile, workTele, workEmail, otherEmail } = req.body;
   const employeeId = req.user?.employeeId || req.headers['employee-id'];
   try {
-    if (!streetOne || !city || !state || !zip || !country || !mobile || !workEmail || !otherEmail) {
+    if (!streetOne || !city || !state || !zip || !country || !mobile || !workTele || !workEmail || !otherEmail) {
       return res.status(400).json({
         success: false,
-        message: "All field are Required"
+        message: "All fields are required"
       })
     }
     const contact = new ContactDetail({
@@ -239,22 +242,87 @@ const createContact = async (req, res) => {
     await contact.save();
     res.status(201).json({
       success: true,
-      message: "Contact Details Saved"
+      message: "Contact details saved"
     });
 
   } catch (error) {
     res.staus(500).json({
       success: false,
-      message: "Contact Details Saving Error",
+      message: "Contact details saving error",
       error: error.message
     })
   }
 }
 
-// const updateContact = async(req, res) =>  {
-//     const { employeeId}
-// }
+const updateContact = async(req, res) =>  {
+  const { streetOne, streetTwo, city, state, zip, country, homeTele, mobile, workTele, workEmail, otherEmail } = req.body;
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
+  
+    const updateData = {};
+    if (streetOne !== undefined) updateData.streetOne = streetOne;
+    if (streetTwo !== undefined) updateData.streetTwo = streetTwo;
+    if (city !== undefined) updateData.city = city;
+    if (state !== undefined) updateData.state = state;
+    if (zip !== undefined) updateData.zip = zip;
+    if (country !== undefined) updateData.country = country;
+    if (homeTele !== undefined) updateData.homeTele = homeTele;
+    if (mobile !== undefined) updateData.mobile = mobile;
+    if (workTele !== undefined) updateData.workTele = workTele;
+    if (workEmail !== undefined) updateData.workEmail = workEmail;
+    if (otherEmail !== undefined) updateData.otherEmail = otherEmail;
+
+    try {
+      const updateContact = await ContactDetail.findOneAndUpdate(
+        {employeeId},
+        updateData,
+        { new: true, runValidators: true}
+      );
+
+      if (!updateContact) {
+        return res.status(404).json({
+          success: false,
+          message: "Contact details not found"
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Contact details updated",
+        updateContact
+      })
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Contact details updating error",
+        error: error.message,
+      })
+    }
+}
+
+const getContact = async (req, res) => {
+  const employeeId = req.user?.employeeId || req.headers['employee-id']
+  try {
+    if (!employeeId) {
+      return res.status(400).json({
+        success: false,
+        message: "Employee ID is required to fetch emergency data"
+      });
+    }
+    const getContact = await ContactDetail.findOne({ employeeId });
+    res.status(200).json({ 
+      success: true,
+      getContact,
+     });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error getting contact details",
+      error: error.message
+    })
+    
+  }
+}
 
 module.exports = { createPersonal, updatePersonal, getPersonal, createEmergency, getEmergency, createJob, getJob,
-  createContact
+  createContact, updateContact, getContact
 };
