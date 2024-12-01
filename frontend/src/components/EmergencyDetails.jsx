@@ -13,45 +13,14 @@ const EmergencyDetails = () => {
   const [mobile, setMobile] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [emergencyId, setEmergencyId] = useState("");
 
   useEffect(() => {
     handleEmergency();
   }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSaving(true);
-    setSuccess("");
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/user/create-emergency",
-        {
-          name,
-          relationship,
-          mobile,
-        },
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        }
-      );
-      setSuccess(response.data.message);
-      setName("");
-      setRelationship("");
-      setMobile("");
-      handleEmergency();
-    } catch (error) {
-      setError(error.response?.data?.message || "An error occurred");
-    } finally {
-      setTimeout(() => {
-        setSaving(false);
-      }, 700);
-    }
-  };
 
   const handleEmergency = async () => {
     setLoading(true);
@@ -67,9 +36,93 @@ const EmergencyDetails = () => {
       const user = response.data.emergencyData;
       setUsers(Array.isArray(user) ? user : user ? [user] : []);
     } catch (error) {
-      setError(error.response?.data?.message || "An error occurred");
+      setError(error.response?.data?.message || "Failed to get Emergency data");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    try {
+      if (isUpdating) {
+        const response = await axios.put(
+          `http://localhost:5000/api/user/update-emergency/${emergencyId}`,
+          {
+            name,
+            relationship,
+            mobile,
+          },
+          {
+            headers: { "employee-id": localStorage.getItem("employeeId") },
+          }
+        );
+        setName("");
+        setRelationship("");
+        setMobile("");
+        setSuccess(response.data.message);
+      } else {
+        const response = await axios.post(
+          "http://localhost:5000/api/user/create-emergency",
+          {
+            name,
+            relationship,
+            mobile,
+          },
+          {
+            headers: { "employee-id": localStorage.getItem("employeeId") },
+          }
+        );
+        setSuccess(response.data.message);
+      }
+      setName("");
+      setRelationship("");
+      setMobile("");
+      setEmergencyId(null);
+      setIsUpdating(false);
+      handleEmergency();
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Failed to submit Emergency data"
+      );
+    }
+  };
+
+  const handleEdit = (user) => {
+    setName(user.name);
+    setRelationship(user.relationship);
+    setMobile(user.mobile);
+    setEmergencyId(user._id);
+    setIsUpdating(true);
+    setError('');
+    setSuccess('');
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this Emergency Detail?")) return;
+    
+    setSuccess("");
+    setError("");
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/user/delete-emergency/${emergencyId}`,
+        {
+          headers: { "employee-id": localStorage.getItem("employeeId") },
+        }
+      );
+      setSuccess(response.data.message);
+      setName("");
+      setRelationship("");
+      setMobile("");
+      handleEmergency();
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Failed to delete emergency detail"
+      );
     }
   };
 
@@ -80,6 +133,8 @@ const EmergencyDetails = () => {
           <h2 className="text-base lg:text-sm font-semibold mb-6">
             Emergency Contact Details
           </h2>
+          <></>
+
           {error && (
             <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>
           )}
@@ -142,7 +197,7 @@ const EmergencyDetails = () => {
             </div>
             <div className="flex justify-end text-sm lg:text-xs mt-6">
               <button className="w-[4rem] lg:w-[9rem] bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-bold">
-                {saving ? "Saving" : "Add"}
+                {isUpdating ? "Update" : "Save"}
               </button>
             </div>
           </form>
@@ -187,12 +242,14 @@ const EmergencyDetails = () => {
                     sm:table-cell sm:justify-around"
                     >
                       <button
+                        onClick={() => handleEdit(user)}
                         className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
                       rounded-lg text-xs sm:inline-block"
                       >
                         Edit
                       </button>
                       <button
+                        onClick={handleDelete}
                         className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
                       rounded-lg sm:inline-block"
                       >

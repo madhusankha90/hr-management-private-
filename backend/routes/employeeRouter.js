@@ -1,13 +1,15 @@
 const express = require('express');
-const { createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob, getPersonal, createContact, updateContact, getContact } = require('../controllers/employeeContoller');
+const { getPersonal, createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob, createContact, updateContact, getContact, updateEmergency, deleteEmergency } = require('../controllers/myInfoContoller');
 const router = express.Router();
 
-router.get('/get-personal', getPersonal);
 router.post('/create-personal/:employeeId', createPersonal);
 router.put('/update-personal/:employeeId', updatePersonal);
+router.get('/get-personal', getPersonal);
 
 router.post('/create-emergency', createEmergency);
+router.put('/update-emergency/:_id', updateEmergency)
 router.get('/get-emergency', getEmergency);
+router.delete('/delete-emergency/:_id', deleteEmergency)
 
 router.post('/create-job', createJob);
 router.get('/get-job', getJob);

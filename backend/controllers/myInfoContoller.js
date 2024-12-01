@@ -76,7 +76,6 @@ const updatePersonal = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "personal Details not Found",
-        employeeId
       })
     }
 
@@ -107,7 +106,7 @@ const getPersonal = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error getting personal details",
-      error: error.message
+      error: error.message,
     })
   }
 }
@@ -130,15 +129,51 @@ const createEmergency = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success : false,
-      message: "Failed to save emergency details",
+      message: "Internal server error in create emergency details",
       error: error.message,
      })
   }
 }
 
-const getEmergency = async (req, res) => {
+const updateEmergency = async (req, res) => {
+  const { _id } = req.params;
+  const { name, relationship, mobile } = req.body; 
+
+  const updateData = {};
+  if (name !== undefined) updateData.name = name;
+  if (relationship !== undefined) updateData.relationship = relationship;
+  if (mobile !== undefined) updateData.mobile = mobile;
+
   try {
-    const employeeId = req.user?.employeeId || req.headers['employee-id'];
+    const updatedEmergency =  await EmergencyDetail.findByIdAndUpdate(
+       _id ,
+      updateData,
+      { new: true, runValidators: true}
+    );
+
+    if (!updatedEmergency) {
+      return res.status(404).json({
+        success: false,
+        message: "Emergency details not found",
+        updatedEmergency,
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "Emergency details updated ",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in update Emergency details",
+      error: error.message,
+    })
+  }
+}
+
+const getEmergency = async (req, res) => {
+  const employeeId = req.user?.employeeId || req.headers['employee-id'];
+  try {
     if (!employeeId) {
       return res.status(400).json({
         success: false,
@@ -146,11 +181,35 @@ const getEmergency = async (req, res) => {
       })
     }
     const emergencyData = await EmergencyDetail.find({employeeId});
-    res.json({emergencyData})
+    res.json({ emergencyData })
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Internal server error in get Emergency data",
+      error: error.message,
+    })
+  }
+}
+
+const deleteEmergency = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const deletedEmergency = await EmergencyDetail.findByIdAndDelete(
+    { _id });
+    if (!deletedEmergency) {
+      return res.status(404).json({
+        success: false,
+        message: "Emergency detail not found"
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "Emergency detail deleted successfully"
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in delete Emergency details",
       error: error.message,
     })
   }
@@ -191,6 +250,7 @@ const createJob = async (req, res) => {
     })
   }
 }
+
 
 const getJob = async (req, res) => {
   const employeeId = req.user?.employeeId || req.headers['employee-id']
@@ -323,6 +383,8 @@ const getContact = async (req, res) => {
   }
 }
 
-module.exports = { createPersonal, updatePersonal, getPersonal, createEmergency, getEmergency, createJob, getJob,
+module.exports = { createPersonal, updatePersonal, getPersonal,
+   createEmergency, updateEmergency, getEmergency, deleteEmergency,
+   createJob, getJob,
   createContact, updateContact, getContact
 };
