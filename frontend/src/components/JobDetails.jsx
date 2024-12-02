@@ -9,8 +9,9 @@ function truncateText(text, maxLength) {
 const JobDetails = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [saving, setSaving] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [jobId, setJobId] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
   const [jobData, setJobData] = useState({
     joinedDate: "",
     jobTitle: "",
@@ -31,27 +32,73 @@ const JobDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess("");
-    setSaving(true);
     setError("");
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/user/create-job",
-        jobData,
+      if (isUpdating) {
+        const response = await axios.put(
+          `http://localhost:5000/api/user/update-job/${jobId}`,
+          jobData,
+          {
+            headers: { "employee-id": localStorage.getItem("employeeId") },
+          }
+        );
+        setSuccess(response.data.message);
+        resetForm();
+        handleJobs();
+      } else {
+        const response = await axios.post(
+          "http://localhost:5000/api/user/create-job",
+          jobData,
+          {
+            headers: { "employee-id": localStorage.getItem("employeeId") },
+          }
+        );
+        setSuccess(response.data.message);
+        resetForm();
+        handleJobs();
+        setIsUpdating(false)
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to submit Job data");
+    }
+  };
+
+  const handleJobs = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/user/get-job",
         {
           headers: { "employee-id": localStorage.getItem("employeeId") },
         }
       );
-      setSuccess(response.data.message);
-      fetchJobs();
-      resetForm();
+      const job = response.data.getjob;
+      setJobs(Array.isArray(job) ? job : job ? [job] : []);
     } catch (error) {
-      setError(error.response?.data?.message || "Error saving Job Details");
-    } finally {
-      setTimeout(() => {
-        setSaving(false);
-      }, 700);
+      setError(
+        error.response?.data?.message || "An error occurred while fetching jobs"
+      );
     }
+  };
+
+  useEffect(() => {
+    handleJobs();
+  }, []);
+
+  const handleEdit = (job) => {
+    setJobId(job._id);
+    setIsUpdating(true);
+    setError('');
+    setSuccess('');
+    setJobData({
+      joinedDate: job.joinedDate,
+      jobTitle: job.jobTitle,
+      jobSpecification: job.jobSpecification,
+      jobCategory: job.jobCategory,
+      subUnit: job.subUnit,
+      location: job.location,
+      employmentStatus: job.employmentStatus,
+    });
   };
 
   const resetForm = () => {
@@ -66,26 +113,25 @@ const JobDetails = () => {
     });
   };
 
-  const fetchJobs = async () => {
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this Job Details?")) return;
+    
+    setSuccess("");
+    setError("");
+
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/user/get-job",
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        }
+      const response = await axios.delete(
+        `http://localhost:5000/api/user/delete-job/${jobId}`
       );
-      const job = response.data.jobData;
-      setJobs(Array.isArray(job) ? job : job ? [job] : []);
+      setSuccess(response.data.message);
+      resetForm();
+      handleJobs();
     } catch (error) {
       setError(
-        error.response?.data?.message || "An error occurred while fetching jobs"
+        error.response?.data?.message || "Failed to delete Job details"
       );
     }
   };
-
-  useEffect(() => {
-    fetchJobs();
-  }, []);
 
   return (
     <div>
@@ -229,9 +275,8 @@ const JobDetails = () => {
               <button
                 type="submit"
                 className="w-[4rem] lg:w-[9rem] font-bold bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl"
-                disabled={saving}
               >
-                {saving ? "Saving..." : "Save"}
+                { isUpdating ? "Update" : "Save" }
               </button>
             </div>
           </form>
@@ -289,12 +334,14 @@ const JobDetails = () => {
                     sm:table-cell sm:justify-around"
                     >
                       <button
+                        onClick={ () => handleEdit(job)}
                         className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
                       rounded-lg text-xs sm:inline-block"
                       >
                         Edit
                       </button>
                       <button
+                        onClick={handleDelete}
                         className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
                       rounded-lg sm:inline-block"
                       >

@@ -160,7 +160,7 @@ const updateEmergency = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      message: "Emergency details updated ",
+      message: "Emergency details updated",
     });
   } catch (error) {
     res.status(500).json({
@@ -199,12 +199,12 @@ const deleteEmergency = async (req, res) => {
     if (!deletedEmergency) {
       return res.status(404).json({
         success: false,
-        message: "Emergency detail not found"
+        message: "Emergency details not found"
       })
     }
     res.status(200).json({
       success: true,
-      message: "Emergency detail deleted successfully"
+      message: "Emergency details deleted successfully"
     })
   } catch (error) {
     res.status(500).json({
@@ -251,6 +251,44 @@ const createJob = async (req, res) => {
   }
 }
 
+const updateJob = async (req, res) => {
+  const { _id } = req.params;
+  const {joinedDate, jobTitle, jobSpecification, jobCategory, subUnit, location, employmentStatus} = req.body;
+
+  const updateData = {};
+  if (joinedDate !== undefined) updateData.joinedDate = joinedDate;
+  if (jobTitle !== undefined) updateData.jobTitle = jobTitle;
+  if (jobSpecification !== undefined) updateData.jobSpecification = jobSpecification;
+  if (jobCategory !== undefined) updateData.jobCategory = jobCategory;
+  if (subUnit !== undefined) updateData.subUnit = subUnit;
+  if (location !== undefined) updateData.location = location;
+  if (employmentStatus !==undefined) updateData.employmentStatus = employmentStatus;
+
+  try {
+    const updatedJob = await JobDetail.findByIdAndUpdate(
+      _id,
+      updateData,
+      { new:true , runValidators: true}
+    );
+    
+    if (!updatedJob) {
+      return res.status(404).json({
+        success: false,
+        message: "Dob details not found"
+      })}
+      res.status(200).json({
+        success: true,
+        message: "Job Details updated",
+      });
+  
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in updating details",
+      error: error.message,
+    })
+  }
+}
 
 const getJob = async (req, res) => {
   const employeeId = req.user?.employeeId || req.headers['employee-id']
@@ -261,16 +299,40 @@ const getJob = async (req, res) => {
         message: "Employee ID is required to fetch emergency data"
       });
     }
-    const jobData = await JobDetail.find({ employeeId});
+    const getjob = await JobDetail.find({ employeeId});
     res.status(200).json({ 
       success: true,
-      jobData, 
+      getjob, 
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Internal server error",
       error: error.message
+    })
+  }
+}
+
+const deleteJob = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const deletedJob = await JobDetail.findByIdAndDelete(
+    { _id });
+    if (!deletedJob) {
+      return res.status(404).json({
+        success: false,
+        message: "Job details not found"
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "Job details deleted successfully"
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in delete Job details",
+      error: error.message,
     })
   }
 }
@@ -384,7 +446,7 @@ const getContact = async (req, res) => {
 }
 
 module.exports = { createPersonal, updatePersonal, getPersonal,
-   createEmergency, updateEmergency, getEmergency, deleteEmergency,
-   createJob, getJob,
+   createEmergency, updateEmergency, getEmergency, deleteEmergency, 
+   createJob, updateJob, getJob, deleteJob, 
   createContact, updateContact, getContact
 };
