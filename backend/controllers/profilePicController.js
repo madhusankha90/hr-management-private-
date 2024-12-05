@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const uploadDir = 'uploads/ProfilePic';
+const uploadDir = 'uploads/profilePics';
 
 // Ensure the upload directory exists
 if (!fs.existsSync(uploadDir)) {
@@ -40,20 +40,4 @@ const upload = multer({
     }
 });
 
-// Upload file function
-const uploadProfilePic = async (req, res) => {
-    upload.single('image')(req, res, (err) => {
-        if (err) {
-            return res.status(500).send(err.message || "Upload failed");
-        }
-        if (!req.file) {
-            return res.status(400).send("No file uploaded");
-        }
-        res.status(200).json({
-            message: "image uploaded successfully",
-            file: req.file
-        });
-    });
-};
-
-module.exports = { uploadProfilePic };
+module.exports = {upload} ;

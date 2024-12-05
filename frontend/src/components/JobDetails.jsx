@@ -113,7 +113,7 @@ const JobDetails = () => {
     });
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this Job Details?")) return;
     
     setSuccess("");
@@ -121,7 +121,7 @@ const JobDetails = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/user/delete-job/${jobId}`
+        `http://localhost:5000/api/user/delete-job/${id}`
       );
       setSuccess(response.data.message);
       resetForm();
@@ -341,7 +341,7 @@ const JobDetails = () => {
                         Edit
                       </button>
                       <button
-                        onClick={handleDelete}
+                        onClick={() => handleDelete(user._id)}
                         className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
                       rounded-lg sm:inline-block"
                       >

@@ -28,10 +28,6 @@ const personalSchema = new mongoose.Schema(
     gender: { 
       type: String 
     },
-    photo: { 
-      data: Buffer, 
-      contentType: String 
-    },
     employeeId: {
       type: String,
       required: true

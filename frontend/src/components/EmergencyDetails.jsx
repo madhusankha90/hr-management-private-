@@ -101,7 +101,7 @@ const EmergencyDetails = () => {
     setSuccess('');
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this Emergency Detail?")) return;
     
     setSuccess("");
@@ -109,7 +109,7 @@ const EmergencyDetails = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/user/delete-emergency/${emergencyId}`,
+        `http://localhost:5000/api/user/delete-emergency/${id}`,
         {
           headers: { "employee-id": localStorage.getItem("employeeId") },
         }
@@ -119,12 +119,14 @@ const EmergencyDetails = () => {
       setRelationship("");
       setMobile("");
       handleEmergency();
+      setEmergencyId(null);
     } catch (error) {
       setError(
         error.response?.data?.message || "Failed to delete emergency detail"
       );
     }
   };
+
 
   return (
     <div>
@@ -249,7 +251,7 @@ const EmergencyDetails = () => {
                         Edit
                       </button>
                       <button
-                        onClick={handleDelete}
+                        onClick={()=> handleDelete(user._id)}
                         className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
                       rounded-lg sm:inline-block"
                       >

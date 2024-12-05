@@ -1,5 +1,8 @@
 const express = require('express');
 const { getPersonal, createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob, createContact, updateContact, getContact, updateEmergency, deleteEmergency, updateJob, deleteJob } = require('../controllers/myInfoContoller');
+const { upload } = require('../controllers/profilePicController');
+
+
 const router = express.Router();
 
 router.post('/create-personal/:employeeId', createPersonal);
@@ -9,7 +12,7 @@ router.get('/get-personal', getPersonal);
 router.post('/create-emergency', createEmergency);
 router.put('/update-emergency/:_id', updateEmergency)
 router.get('/get-emergency', getEmergency);
-router.delete('/delete-emergency/:_id', deleteEmergency)
+router.delete('/delete-emergency/:_id', deleteEmergency);
 
 router.post('/create-job', createJob);
 router.put('/update-job/:_id', updateJob);
