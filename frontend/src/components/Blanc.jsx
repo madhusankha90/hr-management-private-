@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./context/authContext";
 
 const PersonalDetails = () => {
-  const navigate = useNavigate();
-  const { login, personalId, userName, employeeId, _id } = useAuth();
+  const { userName, employeeId, _id } = useAuth();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('')
   const [isUpdating, setIsUpdating] = useState(false);
@@ -16,8 +14,26 @@ const PersonalDetails = () => {
     nationality: '',
     maritalStatus: '',
     dob: '',
-    gender: ''
+    gender: '',
   });
+
+  useEffect(() => {
+    const fetchPersonalDetails = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/user/get-personal', {
+          headers: { "employee-id": localStorage.getItem("employeeId") },
+        });
+        if (response.data.getPersonal) {
+          setPersonalData(response.data.getPersonal);
+          setIsUpdating(true);
+        }
+      } catch (error) {
+        setError(error.response?.data?.message || 'Error fetching personal details');
+      }
+    };
+
+    fetchPersonalDetails();
+  }, []);
 
   const handleChange = (e) => {
     setPersonalData({
@@ -33,40 +49,24 @@ const PersonalDetails = () => {
     });
   };
 
-  const createPersonalDetails = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
     try {
-      const response = await axios.post('http://localhost:5000/api/user/create-personal/', personalData,
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        });
+      const url = isUpdating
+        ? `http://localhost:5000/api/user/update-personal/${employeeId}`
+        : `http://localhost:5000/api/user/create-personal/${employeeId}`;
+      const method = isUpdating ? 'put' : 'post';
+
+      const response = await axios[method](url, personalData, {
+        headers: { "employee-id": localStorage.getItem("employeeId") },
+      });
+
       setSuccess(response.data.message);
       resetForm();
-      
-      
+      setIsUpdating(false);
     } catch (error) {
-      setError(error.response?.data?.message || 'Error saving personal details');
-    }
-  };
-
-  const updatePersonalDetails = async () => {
-    try {
-      const response = await axios.put(`http://localhost:5000/api/user/update-personal/${employeeId}`, personalData,
-        {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
-        }
-      );
-      setSuccess(response.data.message)
-      resetForm();
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error updating personal details');
-    }
-  };
-
-  const handleSubmit = asyn () => {
-    try {
-      const response = await axios.get(`http://localhost:5000/api/user/update-personal/${employeeId}`)
-    } catch (error) {
-      
+      setError(error.response?.data?.message || 'Error Submiting personal details');
     }
   };
 
@@ -103,15 +103,20 @@ const PersonalDetails = () => {
           )}
 
           <div className="flex flex-col lg:flex-row gap-8">
-            <div className="w-full lg:w-1/3 bg-green-50 p-6 rounded-lg overflow-auto">
+            <div className="w-full lg:w-1/3 border-r border-gray-300  p-6 overflow-auto">
               <div className="flex flex-col items-center">
-                <img
-                  src="https://via.placeholder.com/150"
-                  alt="Profile"
-                  className="rounded-full w-28 h-28 mb-4"
+                <input
+                  // type="file"
+                  // name="photo"
+                  // accept="image/"
+                  className="rounded-full w-28 h-28 mb-4 cursor-pointer"
+                  // onChange={(e) => {
+                  //   const file = e.target.files[0];
+                  //   setPersonalData({ ...personalData, photo: file});
+                  // }}
                 />
                 <h3 className="text-base lg:text-base font-semibold">CTO</h3>
-                <p className="text-gray-700 text-sm lg:text-sm uppercase">{userName}</p>
+                <p className="text-gray-700 text-sm lg:text-sm uppercase">{personalData.firstName}</p>
                 <p className="text-gray-500">{employeeId}</p>
                 <p className="text-gray-500">{_id}</p>
                 <p className="text-gray-500">2001-11-16</p>

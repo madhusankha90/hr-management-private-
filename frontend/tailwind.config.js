@@ -8,8 +8,9 @@ export default {
     extend: {
       fontFamily: {
         primary : ['Montserrat', 'sans-serif'],
-        secondary : ['Segoe UI'],
-        third: ['Arial', 'sans-serif']
+        secondary : ['Segoe UI', 'sans-serif'],
+        third: ['Arial', 'sans-serif'],
+        body: ['Inter', 'ui-sans-serif', 'system-ui'],
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite',

@@ -131,7 +131,7 @@ const EmergencyDetails = () => {
   return (
     <div>
       <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
-        <div className="bg-white p-6 lg:p-5 w-full font-primary">
+        <div className="bg-white p-6 lg:p-5 w-full font-body">
           <h2 className="text-base lg:text-sm font-semibold mb-6">
             Emergency Contact Details
           </h2>
@@ -207,7 +207,7 @@ const EmergencyDetails = () => {
       </div>
 
       <div className="bg-white mt-5 p-6 lg:p-5 w-full font-primary mx-auto rounded-xl shadow-md min-h-[10rem] lg:min-h-[18rem] overflow-auto">
-        <h2 className="text-base lg:text-sm font-semibold mb-4">
+        <h2 className="text-base lg:text-sm font-semibold mb-4 font-body">
           ({users.length}) Records Found
         </h2>
         <div className="overflow-x-auto">

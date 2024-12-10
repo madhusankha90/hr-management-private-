@@ -3,10 +3,13 @@ import axios from "axios";
 import { useAuth } from "./context/authContext";
 
 const PersonalDetails = () => {
-  const { login, personalId, userName, employeeId, _id } = useAuth();
+  const { userName, employeeId, _id } = useAuth();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('')
   const [isUpdating, setIsUpdating] = useState(false);
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState('');
+  const [message, setMessage] = useState('');
   const [personalData, setPersonalData] = useState({
     firstName: '',
     lastName: '',
@@ -14,7 +17,7 @@ const PersonalDetails = () => {
     nationality: '',
     maritalStatus: '',
     dob: '',
-    gender: ''
+    gender: '',
   });
 
   useEffect(() => {
@@ -51,6 +54,7 @@ const PersonalDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
       const url = isUpdating
         ? `http://localhost:5000/api/user/update-personal/${employeeId}`
@@ -82,12 +86,57 @@ const PersonalDetails = () => {
     setError('');
   };
 
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/user/get-profile", {
+          headers: { "employee-id": employeeId },
+        });
+        const profilePicUrl = response.data.profilePic || "https://via.placeholder.com/150"; // Placeholder image
+        setPreview(profilePicUrl);
+      } catch (error) {
+        console.error("Error fetching profile picture:", error);
+        setPreview("https://via.placeholder.com/150"); // Default fallback image
+      }
+    };
+
+    fetchProfilePic();
+  }, [employeeId]);
+
+  const handleProfilePic = async (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setPreview(URL.createObjectURL(selectedFile)); // Update preview with selected image
+      await handleUpload(selectedFile); // Automatically upload the file
+    }
+  };
+
+  const handleUpload = async (selectedFile) => {
+    const formData = new FormData();
+    formData.append("photo", selectedFile);
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/upload/upload-profile", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "employee-id": employeeId,
+        },
+      });
+      setMessage(response.data.message || "Profile picture uploaded successfully!");
+    } catch (error) {
+      setMessage("Error uploading file.");
+      console.error(error);
+    }
+  };
+
+
   const nationalities = ["Sinhala", "Tamil", "Muslim"];
 
   return (
     <div>   
       <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
-        <div className="bg-white p-6 lg:p-5 w-full font-primary">
+        <div className="bg-white p-6 lg:p-5 w-full font-body">
           <h2 className="text-base lg:text-sm font-semibold mb-2 uppercase">{userName}</h2>
           <p className="text-gray-500 mb-8 text-sm lg:text-xs font-light">
             Your account is ready, you can now apply for advice...
@@ -102,17 +151,19 @@ const PersonalDetails = () => {
           )}
 
           <div className="flex flex-col lg:flex-row gap-8">
-            <div className="w-full lg:w-1/3 bg-green-50 p-6 rounded-lg overflow-auto">
+            <div className="w-full lg:w-1/3 border-r border-gray-300  p-6 overflow-auto">
               <div className="flex flex-col items-center">
-                <img
-                  src="https://via.placeholder.com/150"
-                  alt="Profile"
-                  className="rounded-full w-28 h-28 mb-4"
-                />
-                <h3 className="text-base lg:text-base font-semibold">CTO</h3>
-                <p className="text-gray-700 text-sm lg:text-sm uppercase">{personalData.firstName}</p>
-                <p className="text-gray-500">{employeeId}</p>
-                <p className="text-gray-500">{_id}</p>
+              <div>
+                  {/* Show preview or default profile picture */}
+                  <img
+                    src={preview}
+                    alt="preview"
+                    className="rounded-full w-28 h-28 mb-4"
+                  />
+                  <input type="file" onChange={handleProfilePic} />
+                </div>
+                <h3 className="text-base lg:text-lg font-bold">CTO</h3>
+                <p className="text-gray-700 text-base lg:text-base uppercase font-semibold">{personalData.firstName}</p>
                 <p className="text-gray-500">2001-11-16</p>
                 <p className="text-gray-500">Sri Lankan</p>
               </div>
@@ -123,7 +174,7 @@ const PersonalDetails = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName"
-                  className="block text-gray-700 text-xs font-medium">Employee Name</label>
+                  className="block text-gray-700 text-xs font-semibold">Employee Name</label>
                   <input
                     type="text"
                     id="firstName"
@@ -147,7 +198,7 @@ const PersonalDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-xs font-medium">Employee Id</label>
+                  <label className="block text-gray-700 text-xs font-semibold">Employee Id</label>
                   <input
                     type="text"
                     value={employeeId}
@@ -159,7 +210,7 @@ const PersonalDetails = () => {
 
                 <div>
                   <label htmlFor="nic"
-                  className="block text-gray-700 text-xs font-medium">NIC</label>
+                  className="block text-gray-700 text-xs font-semibold">NIC</label>
                   <input
                     type="text"
                     id="nic"
@@ -174,7 +225,7 @@ const PersonalDetails = () => {
 
                 <div>
                   <label htmlFor="nationality"
-                  className="block text-gray-700 text-xs font-medium">Nationality</label>
+                  className="block text-gray-700 text-xs font-semibold">Nationality</label>
                   <select
                     id="nationality"
                     name="nationality"
@@ -191,7 +242,7 @@ const PersonalDetails = () => {
 
                 <div>
                   <label htmlFor="maritalStatus"
-                  className="block text-gray-700 text-xs font-medium">Marital Status</label>
+                  className="block text-gray-700 text-xs font-semibold">Marital Status</label>
                   <select
                     id="maritalStatus"
                     name="maritalStatus"
@@ -207,7 +258,7 @@ const PersonalDetails = () => {
 
                 <div>
                   <label htmlFor="dob"
-                  className="block text-gray-700 text-xs font-medium">Date of Birth</label>
+                  className="block text-gray-700 text-xs font-semibold">Date of Birth</label>
                   <input
                     id="dob"
                     type="date"
@@ -219,7 +270,7 @@ const PersonalDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 text-xs font-medium">Gender</label>
+                  <label className="block text-gray-700 text-xs font-semibold">Gender</label>
                   <div className="mt-1">
                     <label className="inline-flex items-center">
                       <input

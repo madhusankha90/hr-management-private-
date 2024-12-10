@@ -341,7 +341,7 @@ const JobDetails = () => {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(user._id)}
+                        onClick={() => handleDelete(job._id)}
                         className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
                       rounded-lg sm:inline-block"
                       >

@@ -1,9 +1,11 @@
 const express = require('express');
 const { uploadFile } = require('../controllers/fileController');
-const { upload } = require('../controllers/profilePicController');
+const { upload } = require('../middleware/uploadMiddleware');
 const router = express.Router();
 
-router.post('/profile-pic', upload.single('photo'));
+router.post('/upload-profilePic', upload.single('photo'));
+router.get('/get-pofilePic')
+
 router.post('/attachment',uploadFile);
 
 module.exports = router;

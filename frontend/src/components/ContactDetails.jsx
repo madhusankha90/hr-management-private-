@@ -91,7 +91,7 @@ const ContactDetails = () => {
 
   return (
     <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
-      <div className="bg-white p-6 lg:p-5 w-full font-primary">
+      <div className="bg-white p-6 lg:p-5 w-full font-body">
         <h2 className="text-base lg:text-sm font-semibold mb-6">
           Contact Details
         </h2>
@@ -108,7 +108,7 @@ const ContactDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label htmlFor="streetOne"
-               className="block text-xs font-medium text-gray-700">
+               className="block text-xs font-semibold text-gray-700">
                 Street 1
               </label>
               <input
@@ -123,7 +123,7 @@ const ContactDetails = () => {
             </div>
             <div>
               <label htmlFor="streetTwo"
-               className="block text-xs font-medium text-gray-700">
+               className="block text-xs font-semibold text-gray-700">
                 Street 2
               </label>
               <input
@@ -138,7 +138,7 @@ const ContactDetails = () => {
             </div>
             <div>
               <label htmlFor="city"
-               className="block text-xs font-medium text-gray-700">
+               className="block text-xs font-semibold text-gray-700">
                 City
               </label>
               <input
@@ -153,7 +153,7 @@ const ContactDetails = () => {
             </div>
             <div>
               <label htmlFor="state"
-               className="block text-xs font-medium text-gray-700">
+               className="block text-xs font-semibold text-gray-700">
                 State / Province
               </label>
               <input
@@ -168,7 +168,7 @@ const ContactDetails = () => {
             </div>
             <div>
               <label htmlFor="zip"
-               className="block text-xs font-medium text-gray-700">
+               className="block text-xs font-semibold text-gray-700">
                 Zip / Postal Code
               </label>
               <input
@@ -183,7 +183,7 @@ const ContactDetails = () => {
             </div>
             <div>
               <label htmlFor="country"
-              className="block text-gray-700 text-xs font-medium">
+              className="block text-gray-700 text-xs font-semibold">
                 Country
               </label>
               <select
@@ -207,7 +207,7 @@ const ContactDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
             <div>
               <label htmlFor="homeTele"
-              className="block text-xs font-medium text-gray-700">
+              className="block text-xs font-semibold text-gray-700">
                 Home
               </label>
               <input
@@ -222,7 +222,7 @@ const ContactDetails = () => {
             </div>
             <div>
               <label htmlFor="mobile"
-              className="block text-xs font-medium text-gray-700">
+              className="block text-xs font-semibold text-gray-700">
                 Mobile
               </label>
               <input
@@ -236,7 +236,7 @@ const ContactDetails = () => {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700">
+              <label className="block text-xs font-semibold text-gray-700">
                 Work
               </label>
               <input
@@ -257,7 +257,7 @@ const ContactDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <div>
               <label htmlFor="workEmail"
-              className="block text-xs font-medium text-gray-700">
+              className="block text-xs font-semibold text-gray-700">
                 Work Email
               </label>
               <input
@@ -271,7 +271,7 @@ const ContactDetails = () => {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700">
+              <label className="block text-xs font-semibold text-gray-700">
                 Other Email
               </label>
               <input
