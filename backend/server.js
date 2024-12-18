@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 
 const ConnectDb = require('./dbConnect');
 const employeeRouter = require('./routes/employeeRouter')
@@ -19,6 +20,8 @@ app.use((req, res, next) => {
     }
     return express.json()(req, res, next);
   });
+  
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 
 app.use('/api/admin',userRouter );
 app.use('/api/user', employeeRouter);

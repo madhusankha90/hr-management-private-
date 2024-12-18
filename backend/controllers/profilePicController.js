@@ -42,6 +42,9 @@ const createProfilePic = async (req, res) => {
       profilePic: createProPic.profilePic,
     });
   } catch (error) {
+    if (req.file) {
+      fs.unlinkSync(path.join(__dirname, "..", "uploads", "profilePics", req.file.filename));
+    }
     res.status(500).json({
       success: false,
       message: "Internal server error in create Profile Picture",
@@ -107,48 +110,50 @@ const updateProfilePic = async (req, res) => {
 };
 
 const getProfilePic = async (req, res) => {
-    const employeeId = req.user?.employeeId || req.headers["employee-id"];
-  
-    try {
-      if (!employeeId) {
-        return res.status(400).json({
-          success: false,
-          message: "EmployeeId required to get Profile picture",
-        });
-      }
-  
-      const getProPic = await ProfilePicture.findOne({ employeeId }); 
-      if (!getProPic) {
-        return res.status(404).json({
-          success: false,
-          message: "Profile Picture not found",
-        });
-      }
-  
-      const profilePicPath = path.join(__dirname, '../uploads/profilePics', getProPic.profilePic);
-  
-      if (fs.existsSync(profilePicPath)) {
-        res.sendFile(profilePicPath);
-      } else {
-        return res.status(404).json({
-          success: false,
-          message: "Profile Picture file not found on server",
-        });
-      }
-      res.status(200).json({
-        success: true,
-        message: "Profile picture get successfull",
-        profilePic: getProPic.profilePic,
+  const employeeId = req.user?.employeeId || req.headers["employee-id"];
+  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
-      })
-    } catch (error) {
-      res.status(500).json({
+  try {
+    if (!employeeId) {
+      return res.status(400).json({
         success: false,
-        message: "Internal server error in get Profile Picture",
-        error: error.message,
+        message: "EmployeeId required to get Profile picture",
       });
     }
-  };
-  
+
+    const getProPic = await ProfilePicture.findOne({ employeeId });
+    if (!getProPic) {
+      return res.status(400).json({
+        success: false,
+        message: "profile picture not found",
+      });
+    }
+
+    const profilePicPath = path.join(
+      __dirname,
+      "../uploads/profilePics",
+      getProPic.profilePic
+    );
+
+    if (fs.existsSync(profilePicPath)) {
+      return res.status(200).json({
+        success: true,
+        message: "Profile picture retrieved successfully",
+        profilePicPath: `${baseUrl}/uploads/profilePics/${getProPic.profilePic}`,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Profile Picture file not found on server",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in get Profile Picture",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = { createProfilePic, updateProfilePic, getProfilePic };

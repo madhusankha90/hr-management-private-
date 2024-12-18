@@ -163,7 +163,7 @@ const JobDetails = () => {
                   type="date"
                   id="joinedDate"
                   name="joinedDate"
-                  value={jobData.joinedDate}
+                  value={jobData.joinedDate ? new Date(jobData.joinedDate).toISOString().slice(0, 10) : ''}
                   onChange={handleChange}
                   className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
                 />
