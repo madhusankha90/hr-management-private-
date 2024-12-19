@@ -1,6 +1,7 @@
 const express = require('express');
 const { getPersonal, createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob, createContact, updateContact, getContact, updateEmergency, deleteEmergency, updateJob, deleteJob } = require('../controllers/myInfoContoller');
 const { upload } = require('../controllers/profilePicController');
+const { createWorkExperience } = require('../controllers/qualificationController');
 
 
 const router = express.Router();
@@ -23,6 +24,8 @@ router.post('/create-contact', createContact);
 router.put('/update-contact', updateContact);
 router.get('/get-contact', getContact);
 
+router.post('/create-work', createWorkExperience);
+router.put('/update-work/:_id')
 
 
 module.exports = router;
