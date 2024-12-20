@@ -11,16 +11,20 @@ const workExperienceSchema = new mongoose.Schema({
     },
     from: {
         type: Date,
-        required: true
+        required: true,
     },
     to: {
         type: Date,
         required: true
     },
-    commnent: {
+    comment: {
         type: String,
         required: false,
         maxlength: 2000
+    },
+    employeeId: {
+        type: String,
+        required: true
     }
 },{
     timestamps: true

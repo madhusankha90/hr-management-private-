@@ -16,7 +16,6 @@ import ContactDetails from './components/ContactDetails';
 import EmergencyDetails from './components/EmergencyDetails';
 import JobDetails from './components/JobDetails';
 import Salary from './components/Salary';
-import Qualification from './components/Qualification';
 import Report from './components/Report';
 import PersonalDetails from './components/PersonalDetails';
 import Apply from './components/leave/Apply';
@@ -28,6 +27,8 @@ import Performance from './components/performance/Performance';
 import Dashboard from './components/dashboard/Dashboard';
 import Directory from './components/directory/Directory';
 import AllUsers from './components/admin/AllUsers';
+import Qualification from './components/myInfo/qualification/Qualification';
+import WorkExperience from './components/myInfo/qualification/WorkExperience';
 
 const App = () => {
   return (
@@ -64,7 +65,7 @@ const App = () => {
             <Route path='/admin/my-info/emergency/' element={<EmergencyDetails/>} />
             <Route path='/admin/my-info/job/' element={<JobDetails/>} />
             <Route path='/admin/my-info/salary/' element={<Salary/>} />
-            <Route path='/admin/my-info/qualification/' element={<Qualification/>} />
+            <Route path='/admin/my-info/qualification/' element={<Qualification />} />
             <Route path='/admin/my-info/report/' element={<Report/>} />
 
             <Route path='/admin/leave/apply/' element={<Apply/>} />
@@ -76,6 +77,8 @@ const App = () => {
             <Route path='/admin/performance/' element={<Performance/>} />
             <Route path='/admin/dashboard/' element={<Dashboard/>} />
             <Route path='/admin/directory/' element={<Directory/>} />
+
+            <Route path='/admin/my-info/qualification/work-experience/' element={<WorkExperience />} />
 
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}

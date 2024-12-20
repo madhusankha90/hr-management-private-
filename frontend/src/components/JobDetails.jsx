@@ -136,7 +136,7 @@ const JobDetails = () => {
   return (
     <div>
       <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
-        <div className="bg-white p-6 lg:p-5 w-full font-primary">
+        <div className="bg-white p-6 lg:p-5 w-full font-body">
           <h2 className="text-base lg:text-sm font-semibold mb-6">
             Job Details
           </h2>
