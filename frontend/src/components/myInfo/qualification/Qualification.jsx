@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
+
 function truncateText(text, maxLength) {
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 }
@@ -38,7 +39,8 @@ const Qualification = () => {
         );
       }
     };
-  });
+    fetchWorkExperience();
+  },[employeeId]);
 
   return (
     <div>
@@ -63,7 +65,47 @@ const Qualification = () => {
                 {work.length > 0 ? (
                   work.slice(0, 3).map((workExperience, index) => (
                     <tr key={index}>
-                      <td className="px-4 py-3 text-xs bg-yellow-200 text-cente"></td>
+                      <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                        {truncateText(workExperience.company, 20)}
+                      </td>
+                      <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                        {truncateText(workExperience.jobTitle, 20)}
+                      </td>
+                      <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {new Date(workExperience.from).toLocaleDateString("en-US", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                      </td>
+                      <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                      {new Date(workExperience.to).toLocaleDateString("en-US", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                      </td>
+                      <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
+                        {truncateText(workExperience.comment, 20)}
+                      </td>
+                      <td
+                      className="text-xs lg:space-x-2 space-y-2 text-center bg-yellow-200
+                    sm:table-cell sm:justify-around">
+                        <button
+                        className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
+                        rounded-lg text-xs sm:inline-block">
+                          Edit
+                        </button>
+                        <button
+                        className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
+                      rounded-lg sm:inline-block"
+                      >
+                        <DeleteOutlineOutlinedIcon
+                          style={{ fontSize: "12px" }}
+                        />
+                      </button>
+                      </td>
+                      
                     </tr>
                   ))
                 ) : (
