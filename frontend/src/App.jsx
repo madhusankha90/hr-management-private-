@@ -79,7 +79,7 @@ const App = () => {
             <Route path='/admin/directory/' element={<Directory/>} />
 
             <Route path='/admin/my-info/qualification/work-experience/' element={<WorkExperience />} />
-
+            <Route path='/admin/my-info/qualification/work-experience/:id' element={<WorkExperience />} />
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>

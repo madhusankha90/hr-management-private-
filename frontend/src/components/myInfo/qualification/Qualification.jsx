@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-
 function truncateText(text, maxLength) {
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 }
@@ -15,6 +14,8 @@ const Qualification = () => {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const [work, setWork] = useState([]);
+  const [id, setId] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     const fetchWorkExperience = async () => {
@@ -33,6 +34,7 @@ const Qualification = () => {
             ? [workExperience]
             : []
         );
+        setCurrentPage(0);
       } catch (error) {
         setError(
           error.response?.data?.message || "Error fetching Work Experience"
@@ -40,7 +42,31 @@ const Qualification = () => {
       }
     };
     fetchWorkExperience();
-  },[employeeId]);
+  }, [employeeId]);
+
+  const experiencePerPage = 3;
+
+  const handleNextPage = () => {
+    if ((currentPage + 1) * experiencePerPage < work.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const displayedUsers = work.slice(
+    currentPage * experiencePerPage,
+    currentPage * experiencePerPage + experiencePerPage
+  );
+
+  const handleEdit = (workExperienceId) => {
+    setId(workExperienceId);
+    navigate(`/admin/my-info/qualification/work-experience/${workExperienceId}`)
+  }
 
   return (
     <div>
@@ -62,8 +88,8 @@ const Qualification = () => {
                 </tr>
               </thead>
               <tbody>
-                {work.length > 0 ? (
-                  work.slice(0, 3).map((workExperience, index) => (
+                {displayedUsers.length > 0 ? (
+                  displayedUsers.map((workExperience, index) => (
                     <tr key={index}>
                       <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
                         {truncateText(workExperience.company, 20)}
@@ -72,40 +98,48 @@ const Qualification = () => {
                         {truncateText(workExperience.jobTitle, 20)}
                       </td>
                       <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {new Date(workExperience.from).toLocaleDateString("en-US", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
+                        {new Date(workExperience.from).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          }
+                        )}
                       </td>
                       <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
-                      {new Date(workExperience.to).toLocaleDateString("en-US", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
+                        {new Date(workExperience.to).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          }
+                        )}
                       </td>
                       <td className="px-4 py-3 text-xs bg-yellow-200 text-center">
                         {truncateText(workExperience.comment, 20)}
                       </td>
                       <td
-                      className="text-xs lg:space-x-2 space-y-2 text-center bg-yellow-200
-                    sm:table-cell sm:justify-around">
+                        className="text-xs lg:space-x-2 space-y-2 text-center bg-yellow-200
+      sm:table-cell sm:justify-around"
+                      >
                         <button
-                        className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
-                        rounded-lg text-xs sm:inline-block">
+                          onClick={()=> handleEdit(workExperience._id)}
+                          className="px-2 py-1 bg-green-500 text-white hover:bg-green-600 transition duration-200
+          rounded-lg text-xs sm:inline-block"
+                        >
                           Edit
                         </button>
                         <button
-                        className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
-                      rounded-lg sm:inline-block"
-                      >
-                        <DeleteOutlineOutlinedIcon
-                          style={{ fontSize: "12px" }}
-                        />
-                      </button>
+                          className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
+      rounded-lg sm:inline-block"
+                        >
+                          <DeleteOutlineOutlinedIcon
+                            style={{ fontSize: "12px" }}
+                          />
+                        </button>
                       </td>
-                      
                     </tr>
                   ))
                 ) : (
@@ -122,15 +156,35 @@ const Qualification = () => {
             </table>
           </div>
 
-          <div className="flex text-sm lg:text-xs mt-6">
-            <button
-              onClick={() =>
-                navigate("/admin/my-info/qualification/work-experience/")
-              }
-              className="px-3 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-xl text-white"
-            >
-              Add More
-            </button>
+          <div className="flex flex-row mt-6 justify-between">
+            <div className="text-sm lg:text-xs">
+              <button
+                onClick={() =>
+                  navigate("/admin/my-info/qualification/work-experience/")
+                }
+                className="px-3 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-xl text-white"
+              >
+                Add More
+              </button>
+            </div>
+            <div className="text-sm lg:text-xs">
+              {currentPage > 0 && (
+                <button
+                  onClick={handlePrevPage}
+                  className="px-3 py-2 bg-gray-500 hover:bg-gray-600 rounded-xl text-white"
+                >
+                  Prev
+                </button>
+              )}
+              {(currentPage + 1) * experiencePerPage < work.length && (
+                <button
+                  onClick={handleNextPage}
+                  className="px-3 py-2 bg-gray-500 hover:bg-gray-600 rounded-xl text-white"
+                >
+                  Next
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

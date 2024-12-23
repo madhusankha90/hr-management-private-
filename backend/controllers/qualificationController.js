@@ -117,7 +117,7 @@ const getWorkExperience = async (req, res) => {
     const getWork = await WorkExperience.find({
       employeeId,
     });
-    res.status(200).json({
+    res.json({
       getWork,
     });
   } catch (error) {
@@ -128,6 +128,7 @@ const getWorkExperience = async (req, res) => {
     });
   }
 };
+
 
 const deleteWorkExperience = async (req, res) => {
   const { _id } = req.params;
