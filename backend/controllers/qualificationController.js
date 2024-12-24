@@ -1,4 +1,5 @@
 const WorkExperience = require("../models/myInfoModels/workExperienceModel");
+const EduExperience = require("../models/myInfoModels/eduExperienceModel");
 
 const createWorkExperience = async (req, res) => {
   const { company, jobTitle, from, to, comment } = req.body;
@@ -155,9 +156,54 @@ const deleteWorkExperience = async (req, res) => {
   }
 };
 
+
+const createEduExperience = async (req, res) => {
+  const { institute, specification, year, start, end} = req.body;
+  const employeeId = req.user?.employeeId || req.headers["employee-id"];
+  try {
+    if (!institute || !specification || !year || !start || !end) {
+        return res.status(400).json({
+          success: false,
+          message: "Other fields are Required"
+        })
+    }
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid date format.",
+      });
+    }
+
+    if (new Date(start) >= new Date(end)) {
+      return res.status(400).json({
+        success: false,
+        message: "Start date must be earlier than End date.",
+      });
+    }
+
+    const createEdu = new EduExperience({
+      
+    })
+
+  } catch (error) {
+    
+  }
+}
+
+
+
+
+
+
+
 module.exports = {
   createWorkExperience,
   updateWorkExperience,
   getWorkExperience,
   deleteWorkExperience,
 };
+
+

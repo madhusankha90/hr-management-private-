@@ -68,6 +68,28 @@ const Qualification = () => {
     navigate(`/admin/my-info/qualification/work-experience/${workExperienceId}`)
   }
 
+  const handleDeleteWorkExperience = async (workExperienceId) => {
+    if (!window.confirm("Are you sure you want to delete this Work Experience ?")) return;
+    setSuccess("");
+    setError("");
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/user/delete-work/${workExperienceId}`,
+        {
+          headers: {
+            "employee-id": employeeId,
+          }
+        }
+      );
+      setSuccess(response.data.message);
+      window.location.reload();
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Failed to delete Work Experience"
+      );
+    }
+  }
   return (
     <div>
       <div className="flex mx-auto rounded-xl overflow-auto shadow-md">
@@ -75,6 +97,15 @@ const Qualification = () => {
           <h2 className="text-base lg:text-sm font-semibold mb-4">
             Work Experience
           </h2>
+          {error && (
+            <p className="text-red-500 mb-4 text-xs font-semibold">{error}</p>
+          )}
+          {success && (
+            <p className="text-green-500 mb-4 text-xs font-semibold">
+              {success}
+            </p>
+          )}
+
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto font-secondary">
               <thead>
@@ -132,6 +163,7 @@ const Qualification = () => {
                           Edit
                         </button>
                         <button
+                          onClick={()=> handleDeleteWorkExperience(workExperience._id)}
                           className="px-3 py-1 bg-red-500 text-white hover:bg-red-600 transition duration-200
       rounded-lg sm:inline-block"
                         >
@@ -188,7 +220,7 @@ const Qualification = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white mt-5 p-6 lg:p-5 w-full font-primary mx-auto rounded-xl shadow-md overflow-auto">
+      <div className="bg-white mt-5 p-6 lg:p-5 w-full font-body mx-auto rounded-xl shadow-md overflow-auto">
         <h2 className="text-base lg:text-sm font-semibold mb-4">
           Education Experience
         </h2>
