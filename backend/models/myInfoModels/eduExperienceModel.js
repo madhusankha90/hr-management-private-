@@ -13,6 +13,10 @@ const eduExperienceSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    gpa: {
+        type: String,
+        required: false
+    },
     start: {
         type: Date,
         required: true

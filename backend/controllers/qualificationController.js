@@ -90,7 +90,7 @@ const updateWorkExperience = async (req, res) => {
     if (!updateWork) {
       return res.status(404).json({
         success: false,
-        message: "work Experience not found",
+        message: "Work Experience not found",
       });
     }
     res.status(200).json({
@@ -145,7 +145,7 @@ const deleteWorkExperience = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      message: "Work Experience deleted successfully",
+      message: "Work Experience Deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -158,10 +158,10 @@ const deleteWorkExperience = async (req, res) => {
 
 
 const createEduExperience = async (req, res) => {
-  const { institute, specification, year, start, end} = req.body;
+  const { institute, specification, year, gpa, start, end} = req.body;
   const employeeId = req.user?.employeeId || req.headers["employee-id"];
   try {
-    if (!institute || !specification || !year || !start || !end) {
+    if (!institute || !specification || !year || !gpa || !start || !end) {
         return res.status(400).json({
           success: false,
           message: "Other fields are Required"
@@ -185,17 +185,128 @@ const createEduExperience = async (req, res) => {
     }
 
     const createEdu = new EduExperience({
-      
+      institute,
+      specification,
+      year,
+      gpa,
+      start,
+      end,
+      employeeId
+    });
+    await createEdu.save();
+    res.status(201).json({
+      success: false,
+      message: "Educational Experience created successfully"
     })
 
   } catch (error) {
-    
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in creating Education Experience",
+      error: error.message
+    })
   }
 }
 
+const updateEduExperience = async (req, res) => {
+  const {_id} = req.params;
+  const { institute, specification, year, gpa, start, end} = req.body;
 
+  const updateData = {};
+  if (institute !== undefined) updateData.institute = institute;
+  if (specification !== undefined) updateData.specification = specification;
+  if (year !== undefined) updateData.year = year;
+  if (gpa !== undefined) updateData.gpa = gpa;
+  if (start !== undefined) updateData.start = start;
+  if (end !== undefined) updateData.end = end;
 
+  try {
+    if (updateData.start || updateData.end) {
+      const startDate = updateData.start || new Date();
+      const endDate = updateData.end || new Date();
 
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid date format.",
+        });
+      }
+
+      if (updateData.start && updateData.end && startDate >= endDate) {
+        return res.status(400).json({
+          success: false,
+          message: "'From' date must be earlier than 'To' date.",
+        });
+      }
+    }
+
+    const updateEdu = await EduExperience.findByIdAndUpdate(_id, updateData,{
+      new: true,
+      runValidators: true
+    });
+    if (!updateEdu) {
+      return res.status(404).json({
+        success: false,
+        message: "Education Experience Not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Education Experince Updated",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server Error in upating Education Experience",
+      error: error.message
+    })
+  }
+}
+
+const getEduExperience = async (req, res) => {
+  const employeeId = req.user?.employeeId || req.headers["employee-id"];
+  try {
+    if (!employeeId) {
+      return res.status(404).json({
+        success: false,
+        message: "Employee Id is required to fetch data"
+      })
+    }
+    const getEdu = await EduExperience.find({
+      employeeId
+    });
+    res.json({getEdu});
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in get Education Experience"
+    })
+  }
+}
+
+const deleteEduExperience = async (req, res) => {
+  const {_id} = req.params;
+  try {
+    const deleteEdu = await EduExperience.findByIdAndDelete({_id});
+    if (!deleteEdu) {
+      return res.status(404).json({
+        success: false,
+        message: "Education Experience not found"
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "Education Experience Deleted successfully"
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in Deleting Education Experience",
+      error: error.message
+    })
+  }
+}
 
 
 
@@ -204,6 +315,11 @@ module.exports = {
   updateWorkExperience,
   getWorkExperience,
   deleteWorkExperience,
+
+  createEduExperience,
+  updateEduExperience,
+  getEduExperience,
+  deleteEduExperience
 };
 
 
