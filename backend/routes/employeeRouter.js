@@ -1,7 +1,7 @@
 const express = require('express');
 const { getPersonal, createPersonal, updatePersonal, createEmergency, getEmergency, createJob, getJob, createContact, updateContact, getContact, updateEmergency, deleteEmergency, updateJob, deleteJob } = require('../controllers/myInfoContoller');
 const { upload } = require('../controllers/profilePicController');
-const { createWorkExperience, updateWorkExperience, getWorkExperience, deleteWorkExperience, createEduExperience, updateEduExperience, getEduExperience, deleteEduExperience } = require('../controllers/qualificationController');
+const { createWorkExperience, updateWorkExperience, getWorkExperience, deleteWorkExperience, createEduExperience, updateEduExperience, getEduExperience, deleteEduExperience, createLanguage, updateLanguage, getLanguage, deleteLanguage } = require('../controllers/qualificationController');
 
 
 const router = express.Router();
@@ -32,7 +32,12 @@ router.delete('/delete-work/:_id', deleteWorkExperience);
 router.post('/create-edu', createEduExperience);
 router.put('/update-edu/:_id', updateEduExperience);
 router.get('/get-edu', getEduExperience);
-router.delete('/delete-edu/_id', deleteEduExperience);
+router.delete('/delete-edu/:_id', deleteEduExperience);
+
+router.post('/create-lang', createLanguage);
+router.put('/update-lang/:_id', updateLanguage);
+router.get('/get-lang', getLanguage);
+router.delete('/delete-lang/:_id', deleteLanguage);
 
 
 module.exports = router;

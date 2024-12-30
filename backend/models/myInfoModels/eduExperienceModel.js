@@ -23,7 +23,7 @@ const eduExperienceSchema = new mongoose.Schema({
     },
     end: {
         type: Date,
-        required: false
+        required: true
     },
     employeeId: {
         type: String,

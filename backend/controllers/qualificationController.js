@@ -1,5 +1,6 @@
 const WorkExperience = require("../models/myInfoModels/workExperienceModel");
 const EduExperience = require("../models/myInfoModels/eduExperienceModel");
+const Language = require("../models/myInfoModels/languageModel");
 
 const createWorkExperience = async (req, res) => {
   const { company, jobTitle, from, to, comment } = req.body;
@@ -25,7 +26,7 @@ const createWorkExperience = async (req, res) => {
     if (new Date(from) >= new Date(to)) {
       return res.status(400).json({
         success: false,
-        message: "'From' date must be earlier than 'To' date.",
+        message: "From date must be earlier than To date",
       });
     }
 
@@ -78,11 +79,10 @@ const updateWorkExperience = async (req, res) => {
       if (updateData.from && updateData.to && fromDate >= toDate) {
         return res.status(400).json({
           success: false,
-          message: "'From' date must be earlier than 'To' date.",
+          message: "From date must be earlier than To date",
         });
       }
     }
-
     const updateWork = await WorkExperience.findByIdAndUpdate(_id, updateData, {
       new: true,
       runValidators: true,
@@ -195,7 +195,7 @@ const createEduExperience = async (req, res) => {
     });
     await createEdu.save();
     res.status(201).json({
-      success: false,
+      success: true,
       message: "Educational Experience created successfully"
     })
 
@@ -217,8 +217,8 @@ const updateEduExperience = async (req, res) => {
   if (specification !== undefined) updateData.specification = specification;
   if (year !== undefined) updateData.year = year;
   if (gpa !== undefined) updateData.gpa = gpa;
-  if (start !== undefined) updateData.start = start;
-  if (end !== undefined) updateData.end = end;
+  if (start !== undefined) updateData.start = new Date(start);
+  if (end !== undefined) updateData.end = new Date(end);
 
   try {
     if (updateData.start || updateData.end) {
@@ -235,14 +235,14 @@ const updateEduExperience = async (req, res) => {
       if (updateData.start && updateData.end && startDate >= endDate) {
         return res.status(400).json({
           success: false,
-          message: "'From' date must be earlier than 'To' date.",
+          message: "Start date must be earlier than End date",
         });
       }
     }
 
     const updateEdu = await EduExperience.findByIdAndUpdate(_id, updateData,{
       new: true,
-      runValidators: true
+      runValidators: true,
     });
     if (!updateEdu) {
       return res.status(404).json({
@@ -268,7 +268,7 @@ const getEduExperience = async (req, res) => {
   const employeeId = req.user?.employeeId || req.headers["employee-id"];
   try {
     if (!employeeId) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "Employee Id is required to fetch data"
       })
@@ -308,7 +308,115 @@ const deleteEduExperience = async (req, res) => {
   }
 }
 
+const createLanguage = async (req, res) => {
+  const {language, competency} = req.body;
+  const employeeId = req.user?.employeeId || req.headers["employee-id"];
+  try {
+    if (!employeeId) {
+      return res.status(400).json({
+        success: false,
+        message: "Employee Id required"
+      })
+    }
+    if (!language || !competency) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      })
+    }
+    const createLang = new Language({
+      language,
+      competency,
+      employeeId
+    });
+    await createLang.save();
+    res.status(201).json({
+      success: true,
+      message: "Language Skills Saved successfully"
+    })
 
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server Error in creating Language skills",
+      error: error.message
+    })
+  }
+}
+
+const updateLanguage = async (req, res) => {
+  const {_id} = req.params;
+  const {language, competency} = req.body;
+
+  const updateData = {};
+  if (language !== undefined) updateData.language = language;
+  if (competency !== undefined) updateData.competency = competency;
+
+  try {
+    const updateLang = await Language.findByIdAndUpdate(_id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updateLang) {
+      return res.status(404).json({
+        success: false,
+        message: "Language Skills not found"
+      })
+    };
+    res.status(200).json({
+      success: true,
+      message: "Language skills updated"
+    });
+  } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal server error in update Language skills",
+        error: error.message
+      })
+  }
+}
+
+const getLanguage = async (req, res) => {
+  const employeeId = req.user?.employeeId || req.headers["employee-id"];
+  try {
+    if (!employeeId) {
+      return res.status(400).json({
+        success: false,
+        message: "EmployeeId is required to fetch data"
+      })
+    }
+    const getLang = await Language.find({
+      employeeId
+    });
+    res.json({getLang});
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in get Language skills"
+    })
+  }
+}
+const deleteLanguage = async (req, res) => {
+  const {_id} = req.params;
+  try {
+    const deleteLang = await Language.findByIdAndDelete({_id});
+    if (!deleteLang) {
+      return res.status(404).json({
+        success: false,
+        message: "Language skill not found"
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "Language skills deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error in deleting Language skills"
+    })
+  }
+}
 
 module.exports = {
   createWorkExperience,
@@ -319,7 +427,12 @@ module.exports = {
   createEduExperience,
   updateEduExperience,
   getEduExperience,
-  deleteEduExperience
+  deleteEduExperience,
+
+  createLanguage,
+  updateLanguage,
+  getLanguage,
+  deleteLanguage
 };
 
 
