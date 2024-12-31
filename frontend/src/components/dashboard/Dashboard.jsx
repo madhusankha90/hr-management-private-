@@ -1,97 +1,125 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useAuth } from '../../components/context/authContext';
+import { useAuth } from "../../components/context/authContext";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import PortraitOutlinedIcon from "@mui/icons-material/PortraitOutlined";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 
 const Dashboard = () => {
-  const { employeeId } = useAuth() 
-    
+  const { employeeId } = useAuth();
+
   const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");  
+  const [error, setError] = useState("");
   const [isPunchIn, setIsPunchIn] = useState(false);
   const [time, setTime] = useState(
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   );
-  const [hours, setHours] = useState(0); // Track elapsed hours
-  const [minutes, setMinutes] = useState(0); // Track elapsed minutes
-  const [timerInterval, setTimerInterval] = useState(null); // Store interval ID
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [punchInTime, setPunchInTime] = useState(null);
 
-//   const handlePucnh = async () => {
-//     if (isPunchIn) {
-//       if (window.confirm("Are you sure you want to Punch Out?")) {
-//         clearInterval(timerInterval); // Stop the timer
-//         setTimerInterval(null);
-//         setIsPunchIn(false);
-//       }
-//     } else {
-//       if (window.confirm("Are you sure you want to Punch In?")) {
-//         const interval = setInterval(() => {
-//             setMinutes((prevMinutes) => {
-//               if (prevMinutes === 59) {
-//                 setHours((prevHours) => prevHours + 1);
-//                 return 0; // Reset minutes to 0 after 59
-//               }
-//               return prevMinutes + 1;
-//             });
-//           }, 60000); // Increment minutes every 60,000ms (1 minute)
-//           setTimerInterval(interval);
-//           setIsPunchIn(true);
-//       }
-//     }
-//   };
-
-const handlePunch = async () => {
+  const handlePunch = async () => {
     setSuccess("");
     setError("");
-    if (isPunchIn) {
-        if (window.confirm("Are you sure you want to Punch Out?")) {
-            clearInterval(timerInterval);
-            setTimerInterval(null);
 
-            const punchTime = new Date();
-            try {
-                const response = await axios.post("http://localhost:5000/api/dashboard/punch-out",
-                    {punchTime},{
-                    headers: {
-                        "employee-id": employeeId,
-                    }
-            });
-                setSuccess(response.data.message);
-                setError("");
-                setIsPunchIn(false);
-            } catch (error) {
-                setSuccess("");
-                setError(
-                    error.response?.data?.message || "Failed to punch out. Please try again"
-                  );
+    if (isPunchIn) {
+      if (window.confirm("Are you sure you want to Punch Out?")) {
+        clearInterval(localStorage.getItem("timerId"));
+        localStorage.removeItem("timerId");
+
+        try {
+          const punchTime = new Date();
+          const response = await axios.post(
+            "http://localhost:5000/api/dashboard/punch-out",
+            { punchTime },
+            {
+              headers: {
+                "employee-id": employeeId,
+              },
             }
+          );
+          setSuccess(response.data.message);
+          setIsPunchIn(false);
+          setPunchInTime(null);
+          localStorage.removeItem("punchInTime");
+          localStorage.setItem("isPunchIn", false);
+        } catch (error) {
+          setError(
+            error.response?.data?.message ||
+              "Failed to punch out. Please try again"
+          );
         }
-    }else {
-        if (window.confirm("Are you sure you want to Punch In?")) {
-            const interval = setInterval(() => {
-              setMinutes((prevMinutes) => {
-                if (prevMinutes === 59) {
-                  setHours((prevHours) => prevHours + 1);
-                  return 0; // Reset minutes to 0 after 59
-                }
-                return prevMinutes + 1;
-              });
-            }, 60000); // Increment minutes every 60,000ms (1 minute)
-            setTimerInterval(interval);
-            setIsPunchIn(true);
-          }
+      }
+    } else {
+      if (window.confirm("Are you sure you want to Punch In?")) {
+        const punchInTime = new Date();
+        setPunchInTime(punchInTime);
+        localStorage.setItem("punchInTime", punchInTime.toISOString());
+        localStorage.setItem("isPunchIn", true);
+        setIsPunchIn(true);
+
+        const intervalId = setInterval(() => {
+          updateElapsedTime(punchInTime);
+        }, 1000);
+        localStorage.setItem("timerId", intervalId);
+      }
     }
-}
+  };
+
+  const updateElapsedTime = (punchInTime) => {
+    const now = new Date();
+    const elapsed = now - new Date(punchInTime);
+    setHours(Math.floor(elapsed / 3600000));
+    setMinutes(Math.floor(elapsed / 60000) % 60);
+  };
 
   useEffect(() => {
-    if (!isPunchIn) {
-      setHours(0);
-      setMinutes(0);
+    const savedPunchInTime = localStorage.getItem("punchInTime");
+    const savedIsPunchIn = localStorage.getItem("isPunchIn") === "true";
+
+    if (savedIsPunchIn && savedPunchInTime) {
+      const punchInTime = new Date(savedPunchInTime);
+      setPunchInTime(punchInTime);
+      setIsPunchIn(true);
+
+      updateElapsedTime(punchInTime);
+      const intervalId = setInterval(() => {
+        updateElapsedTime(punchInTime);
+      }, 1000);
+      localStorage.setItem("timerId", intervalId);
     }
-  }, [isPunchIn]);
-  
+
+    return () => {
+      clearInterval(localStorage.getItem("timerId"));
+    };
+  }, []);
+
+  const formatPunchInTime = (punchInTime) => {
+    const punchInDate = new Date(punchInTime);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (punchInDate.toDateString() === today.toDateString()) {
+      return `Today at ${punchInDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+    } else if (punchInDate.toDateString() === yesterday.toDateString()) {
+      return `Yesterday at ${punchInDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+    } else {
+      return `${punchInDate.toLocaleDateString()} at ${punchInDate.toLocaleTimeString(
+        [],
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      )}`;
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -102,6 +130,7 @@ const handlePunch = async () => {
         })
       );
     }, 1000);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -176,10 +205,12 @@ const handlePunch = async () => {
                 APPLY AWAY FROM KEY BOARD
               </h2>
               <p className="text-sm lg:text-xs font-semibold text-gray-500 mt-3">
-                Punched In Todat at 6.65 A.M
+                {punchInTime
+                  ? `Punched In ${formatPunchInTime(punchInTime)}`
+                  : "Not Punched In Yet"}
               </p>
               <h2 className="text-[2rem] text-center font-bold mx-auto w-auto mt-3">
-              {hours}h {minutes}m Today
+                {hours}h {minutes}m Today
               </h2>
             </div>
           </div>

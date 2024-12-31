@@ -31,6 +31,7 @@ import Qualification from './components/myInfo/qualification/Qualification';
 import WorkExperience from './components/myInfo/qualification/WorkExperience';
 import EduExperience from './components/myInfo/qualification/EduExperience';
 import LanguageSkill from './components/myInfo/qualification/LanguageSkill';
+import AdminLocation from './components/location/AdminLocation';
 
 const App = () => {
   return (
@@ -74,7 +75,6 @@ const App = () => {
             <Route path='/admin/leave/my-leave/' element={<MyLeave/>} />
             <Route path='/admin/leave/entitlement/' element={<Entitlement/>} />
 
-            <Route path='/admin/location/' element={<Location/>} />
             <Route path='/admin/time/' element={<Time/>} />
             <Route path='/admin/performance/' element={<Performance/>} />
             <Route path='/admin/dashboard/' element={<Dashboard/>} />
@@ -87,6 +87,8 @@ const App = () => {
 
             <Route path='/admin/my-info/qualification/language-skills/' element={<LanguageSkill/>} />
             <Route path='/admin/my-info/qualification/language-skills/:id' element={<LanguageSkill/>} />
+
+            <Route path='/admin/location/' element={<AdminLocation/>} /> 
 
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
