@@ -28,7 +28,7 @@ const Login = () => {
         if (user.userRole === 'Admin') {
           navigate('/admin');
         } else {
-          navigate('/');
+          navigate('/admin');
         }
       }
     } catch (error) {
