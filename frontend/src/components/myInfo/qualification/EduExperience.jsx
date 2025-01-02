@@ -20,6 +20,9 @@ const EduExperience = () => {
     end: "",
   });
 
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     setEduData({
@@ -44,8 +47,8 @@ const EduExperience = () => {
 
     try {
       const url = isUpdating
-        ? `http://localhost:5000/api/user/update-edu/${id}`
-        : "http://localhost:5000/api/user/create-edu";
+        ? `${baseUrl}/api/user/update-edu/${id}`
+        : `${baseUrl}/api/user/create-edu`;
       const method = isUpdating ? "put" : "post";
       const response = await axios[method](url, eduData, {
         headers: {

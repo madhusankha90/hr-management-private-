@@ -36,6 +36,8 @@ const WorkExperience = () => {
     }
   }, [id]);
   
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,8 +45,8 @@ const WorkExperience = () => {
     setError("");
     try {
       const url = isUpdating
-        ? `http://localhost:5000/api/user/update-work/${id}`
-        : "http://localhost:5000/api/user/create-work";
+        ? `${baseUrl}/api/user/update-work/${id}`
+        : `${baseUrl}/api/user/create-work`;
       const method = isUpdating ? "put" : "post";
       const response = await axios[method](url, workData, {
         headers: {

@@ -18,6 +18,9 @@ const Dashboard = () => {
   const [minutes, setMinutes] = useState(0);
   const [punchInTime, setPunchInTime] = useState(null);
 
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
   const handlePunch = async () => {
     setSuccess("");
     setError("");
@@ -30,7 +33,7 @@ const Dashboard = () => {
         try {
           const punchTime = new Date();
           const response = await axios.post(
-            "http://localhost:5000/api/dashboard/punch-out",
+            `${baseUrl}/api/dashboard/punch-out`,
             { punchTime },
             {
               headers: {

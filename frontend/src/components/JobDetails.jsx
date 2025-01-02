@@ -29,6 +29,9 @@ const JobDetails = () => {
     });
   };
 
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess("");
@@ -37,7 +40,7 @@ const JobDetails = () => {
     try {
       if (isUpdating) {
         const response = await axios.put(
-          `http://localhost:5000/api/user/update-job/${jobId}`,
+          `${baseUrl}/api/user/update-job/${jobId}`,
           jobData,
           {
             headers: { "employee-id": localStorage.getItem("employeeId") },
@@ -48,7 +51,7 @@ const JobDetails = () => {
         handleJobs();
       } else {
         const response = await axios.post(
-          "http://localhost:5000/api/user/create-job",
+          `${baseUrl}/api/user/create-job`,
           jobData,
           {
             headers: { "employee-id": localStorage.getItem("employeeId") },
@@ -67,7 +70,7 @@ const JobDetails = () => {
   const handleJobs = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/user/get-job",
+        `${baseUrl}/api/user/get-job`,
         {
           headers: { "employee-id": localStorage.getItem("employeeId") },
         }

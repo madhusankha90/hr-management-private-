@@ -90,6 +90,7 @@ const App = () => {
 
             <Route path='/admin/location/' element={<AdminLocation/>} /> 
 
+            <Route path='/admin/location/new/' element={<Location/>} />
             {/* <Route path='/admin-dashboard' element={<PrivateRoute role="admin" component={AdminDashboard}/>}/>
             <Route path='/admin-dashboard/punchin' element={<PrivateRoute role="admin" component={PunchIn}/>}/> */}
           </Route>

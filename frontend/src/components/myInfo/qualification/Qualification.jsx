@@ -48,11 +48,15 @@ const Qualification = () => {
   const [eduCurrentPage, setEduCurrentPage] = useState(0);
   const [langCurrentPage, setLangCurrentPage] = useState(0);
 
+
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
   useEffect(() => {
     const fetchWorkExperience = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/user/get-work",
+          `${baseUrl}/api/user/get-work`,
           {
             headers: { "employee-id": employeeId },
           }
@@ -86,7 +90,7 @@ const Qualification = () => {
     const fetchEduExperience = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/user/get-edu",
+          `${baseUrl}/api/user/get-edu`,
           {
             headers: {
               "employee-id": employeeId,
@@ -115,7 +119,7 @@ const Qualification = () => {
     const fetchLangSkill = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/user/get-lang",
+          `${baseUrl}/api/user/get-lang`,
           {
             headers: {
               "employee-id": employeeId
@@ -171,7 +175,7 @@ const Qualification = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/user/${endpoint}/${id}`,
+        `${baseUrl}/api/user/${endpoint}/${id}`,
         {
           headers: {
             "employee-id": employeeId,

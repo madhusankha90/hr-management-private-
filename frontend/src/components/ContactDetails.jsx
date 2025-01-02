@@ -19,11 +19,13 @@ const ContactDetails = () => {
     otherEmail: "",
   });
 
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchContactDetails = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/user/get-contact",
+          `${baseUrl}/api/user/get-contact`,
           {
             headers: { "employee-id": localStorage.getItem("employeeId") },
           }
@@ -53,8 +55,8 @@ const ContactDetails = () => {
     e.preventDefault();
     try {
       const url = isUpdating
-        ? "http://localhost:5000/api/user/update-contact"
-        : "http://localhost:5000/api/user/create-contact";
+        ? `${baseUrl}/api/user/update-contact`
+        : `${baseUrl}/api/user/create-contact`;
       const method = isUpdating ? "put" : "post";
 
       const response = await axios[method](url, contactData, {

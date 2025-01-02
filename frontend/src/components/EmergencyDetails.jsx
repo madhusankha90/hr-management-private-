@@ -18,6 +18,8 @@ const EmergencyDetails = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [emergencyId, setEmergencyId] = useState("");
 
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     handleEmergency();
   }, []);
@@ -28,7 +30,7 @@ const EmergencyDetails = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/user/get-emergency",
+        `${baseUrl}/api/user/get-emergency`,
         {
           headers: { "employee-id": localStorage.getItem("employeeId") },
         }
@@ -50,7 +52,7 @@ const EmergencyDetails = () => {
     try {
       if (isUpdating) {
         const response = await axios.put(
-          `http://localhost:5000/api/user/update-emergency/${emergencyId}`,
+          `${baseUrl}/api/user/update-emergency/${emergencyId}`,
           {
             name,
             relationship,
@@ -66,7 +68,7 @@ const EmergencyDetails = () => {
         setSuccess(response.data.message);
       } else {
         const response = await axios.post(
-          "http://localhost:5000/api/user/create-emergency",
+          `${baseUrl}/api/user/create-emergency`,
           {
             name,
             relationship,

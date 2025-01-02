@@ -23,11 +23,14 @@ const PersonalDetails = () => {
     gender: "",
   });
 
+  const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
   useEffect(() => {
     const fetchPersonalDetails = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/user/get-personal",
+          `${baseUrl}/api/user/get-personal`,
           {
             headers: { "employee-id": employeeId },
           }
@@ -65,8 +68,8 @@ const PersonalDetails = () => {
 
     try {
       const url = isUpdating
-        ? `http://localhost:5000/api/user/update-personal/${employeeId}`
-        : `http://localhost:5000/api/user/create-personal/${employeeId}`;
+        ? `${baseUrl}/api/user/update-personal/${employeeId}`
+        : `${baseUrl}/api/user/create-personal/${employeeId}`;
       const method = isUpdating ? "put" : "post";
 
       const response = await axios[method](url, personalData, {
@@ -100,7 +103,7 @@ const PersonalDetails = () => {
     const fetchProfilePic = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/upload/get-profilePic",
+          `${baseUrl}/api/upload/get-profilePic`,
           {
             headers: {
               "employee-id": employeeId,
@@ -136,8 +139,8 @@ const PersonalDetails = () => {
 
     try {
       const url = isProfileUpdating
-        ? "http://localhost:5000/api/upload/update-profilePic"
-        : "http://localhost:5000/api/upload/create-profilePic";
+        ? `${baseUrl}/api/upload/update-profilePic`
+        : `${baseUrl}/api/upload/create-profilePic`;
       const method = isProfileUpdating ? "put" : "post";
 
       const response = await axios({

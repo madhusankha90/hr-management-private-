@@ -22,6 +22,9 @@ const LanguageSkill = () => {
         }
     })
 
+    const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSuccess("");
@@ -31,8 +34,8 @@ const LanguageSkill = () => {
 
         try {
             const url = isUpdating
-            ? `http://localhost:5000/api/user/update-lang/${id}`
-            : "http://localhost:5000/api/user/create-lang";
+            ? `${baseUrl}/api/user/update-lang/${id}`
+            : `${baseUrl}/api/user/create-lang`;
           const method = isUpdating ? "put" : "post";
           const response = await axios[method](url, langData, {
             headers: {
