@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { useAuth } from "./context/authContext";
 
 function truncateText(text, maxLength) {
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 }
 
 const JobDetails = () => {
+  const {employeeId} = useAuth();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [jobs, setJobs] = useState([]);
@@ -43,7 +45,7 @@ const JobDetails = () => {
           `${baseUrl}/api/user/update-job/${jobId}`,
           jobData,
           {
-            headers: { "employee-id": localStorage.getItem("employeeId") },
+            headers: { "employee-id": employeeId },
           }
         );
         setSuccess(response.data.message);
@@ -54,7 +56,7 @@ const JobDetails = () => {
           `${baseUrl}/api/user/create-job`,
           jobData,
           {
-            headers: { "employee-id": localStorage.getItem("employeeId") },
+            headers: { "employee-id": employeeId },
           }
         );
         setSuccess(response.data.message);
@@ -72,7 +74,7 @@ const JobDetails = () => {
       const response = await axios.get(
         `${baseUrl}/api/user/get-job`,
         {
-          headers: { "employee-id": localStorage.getItem("employeeId") },
+          headers: { "employee-id": employeeId },
         }
       );
       const job = response.data.getjob;
@@ -124,7 +126,7 @@ const JobDetails = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/user/delete-job/${id}`
+        `${baseUrl}/api/user/delete-job/${id}`
       );
       setSuccess(response.data.message);
       resetForm();
@@ -135,6 +137,8 @@ const JobDetails = () => {
       );
     }
   };
+
+  const jobTitles = ["CEO", "CFO", "CTO", "CMO", "HR Executive", "Accountant", "Wordpress Developer", "Marketing Specialist"];
 
   return (
     <div>
@@ -178,15 +182,18 @@ const JobDetails = () => {
                 >
                   Job Title
                 </label>
-                <input
-                  type="text"
+                <select
                   id="jobTitle"
                   name="jobTitle"
                   value={jobData.jobTitle}
                   onChange={handleChange}
-                  placeholder="Enter Job Title"
                   className="mt-1 block w-full p-4 md:p-3 lg:p-3 border border-gray-300 rounded-xl focus:border-yellow-500 text-xs focus:outline-none"
-                />
+                >
+                <option value="">-- Select --</option>
+                {jobTitles.map((jobTitle) => (
+                <option key={jobTitle}>{jobTitle}</option>
+                ))}
+                </select>
               </div>
               <div>
                 <label

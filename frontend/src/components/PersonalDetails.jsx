@@ -13,6 +13,8 @@ const PersonalDetails = () => {
   const [file, setFile] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [preview, setPreview] = useState("");
+  const [title, setTitle] = useState("");
+  const [country, setCountry] = useState("");
   const [personalData, setPersonalData] = useState({
     firstName: "",
     lastName: "",
@@ -165,6 +167,57 @@ const PersonalDetails = () => {
     }
   };
 
+  const handleJob  = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/user/get-job`,
+        {
+          headers: { "employee-id": employeeId },
+        }
+      );
+      const job = response.data.getjob[0];
+      if (job) {
+        const formattedDate = new Date(job.joinedDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        setTitle({ ...job, joinedDate: formattedDate });
+      }
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Error get job details"
+      );
+    }
+  };
+
+  useEffect(() => {
+    handleJob();
+  },[]);
+
+  const handleContact = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/user/get-contact`,
+        {
+          headers: {
+            "employee-id": employeeId,
+          }
+        }
+      );
+      const coun = response.data.getContact;
+      setCountry(coun.country);
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Error get Contact details"
+      );
+    }
+  };
+
+  useEffect(()=> {
+    handleContact();
+  },[]);
+
   const nationalities = ["Sinhala", "Tamil", "Muslim"];
 
   return (
@@ -191,7 +244,7 @@ const PersonalDetails = () => {
               <div className="flex flex-col items-center">
                 <div className="relative inline-block">
                   <img
-                    src={preview}
+                    src={preview || null}
                     alt="Profile"
                     className="rounded-full w-28 h-28 mb-4 object-cover border border-gray-300"
                   />
@@ -212,12 +265,12 @@ const PersonalDetails = () => {
                   </label>
                 </div>
 
-                <h3 className="text-base lg:text-lg font-bold">CTO</h3>
+                <h3 className="text-base lg:text-lg font-bold">{title?.jobTitle || "W3INVENTOR"}</h3>
                 <p className="text-gray-700 text-base lg:text-base uppercase font-semibold">
                   {personalData.firstName}
                 </p>
-                <p className="text-gray-500">2001-11-16</p>
-                <p className="text-gray-500">Sri Lankan</p>
+                <p className="text-gray-500">{title?.joinedDate || "No Date Available"}</p>
+                <p className="text-gray-500">{country || "Sri Lanka"}</p>
               </div>
             </div>
 
